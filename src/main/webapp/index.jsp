@@ -1,3 +1,5 @@
+<%@ page import="java.sql.Connection" %>
+<%@ page import="bookstore.DB.DBConnect" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -5,12 +7,11 @@
     <title>Book Store</title>
     <%@include file="all_component/all_css.jsp"%>
 </head>
+
 <body>
 
 <!--Main Navigation-->
 <header>
-<%--    <%@include file="all_component/test.jsp"%>--%>
-
     <!-- Header -->
     <%@include file="all_component/header.jsp"%>
     <!-- Header -->
@@ -20,6 +21,7 @@
     <!-- Navbar -->
 
 </header>
+<!--Main Navigation-->
 
 <!-- Carousel -->
 <%@include file="all_component/carousel.jsp"%>
