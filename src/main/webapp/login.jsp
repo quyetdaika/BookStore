@@ -1,4 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page isELIgnored="false" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,15 +36,19 @@
                                 <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp" class="img-fluid" alt="Sample image" />
                             </div>
                             <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-                                <form>
+                                <form action="login" method="post">
                                     <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign in</p>
 
+                                    <c:if test="${not empty failedMsg}">
+                                        <p class="text-center text-danger">${failedMsg}</p>
+                                        <c:remove var="failedMsg" scope="session"></c:remove>
+                                    </c:if>
                                     <!-- Email input -->
                                     <div class="d-flex flex-row align-items-center mb-4">
                                         <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                                         <div data-mdb-input-init class="form-outline flex-fill mb-0">
-                                            <input type="email" id="form3Example3c" class="form-control" />
-                                            <label class="form-label" for="form3Example3c">Your Email</label>
+                                            <input type="email" name="email" class="form-control" />
+                                            <label class="form-label">Your Email</label>
                                         </div>
                                     </div>
 
@@ -49,8 +56,8 @@
                                     <div class="d-flex flex-row align-items-center mb-4">
                                         <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                                         <div data-mdb-input-init class="form-outline flex-fill mb-0">
-                                            <input type="password" id="form3Example4c" class="form-control" />
-                                            <label class="form-label" for="form3Example4c">Password</label>
+                                            <input type="password" name="password" class="form-control" />
+                                            <label class="form-label">Password</label>
                                         </div>
                                     </div>
 

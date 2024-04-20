@@ -2,7 +2,7 @@
     <div class="row">
         <!-- Left element -->
         <div class="col-6">
-            <a href="index.jsp">
+            <a href="../home.jsp">
                 <img src="all_component/img/logo2%20no%20tran%20resize%20color.png" alt="" height="100">
             </a>
             <span class="small" style="font-family: 'Fira Code', monospace;">Contact with Quyet on</span>

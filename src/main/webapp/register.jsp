@@ -1,5 +1,6 @@
-<%--<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>--%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page isELIgnored="false" %>
 <!DOCTYPE html>
 <html>
@@ -33,7 +34,8 @@
                                 <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
 
                                 <c:if test="${not empty successMsg}">
-                                    <p class="text-success">${successMsg}</p>
+                                    <p class="text-center text-success">${successMsg}</p>
+                                    <a href="login.jsp" class="text-custom fs-6">Sign in ?</a>
                                     <c:remove var="successMsg" scope="session" />
                                 </c:if>
 
