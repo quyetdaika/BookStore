@@ -1,16 +1,41 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: quyetdaika
-  Date: 4/20/2024
-  Time: 4:01 PM
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>Title</title>
-</head>
-<body>
+<div class="container border border-primary">
+    <div class="row">
+        <!-- Left element -->
+        <div class="col">
+            <a href="home.jsp">
+                <img src="../all_component/img/logo2%20no%20tran%20resize%20color.png" alt="" height="100">
+            </a>
+            <span style="font-family: 'Fira Code', monospace;">Admin Dashboard</span>
+        </div>
 
-</body>
-</html>
+        <!-- Left element -->
+
+        <!-- Right element -->
+        <div class="col">
+            <div class="container align-items-center flex-column">
+                <!-- Sign in & sign up -->
+                <div class="row d-flex justify-content-center m-2">
+                    <span class="text-center">
+                        <a href="#" class="text-custom fs-6">Sign in</a>
+                        <span>or</span>
+                        <a href="#" class="text-custom fs-6">Create an Account</a>
+                    </span>
+                </div>
+                <!-- Sign in & sign up -->
+
+                <!-- Search, wishlist, cart -->
+                <div class="row text-center">
+                    <div class="col-9 bg-custom py-3">
+                        <form action="" class="input-group ">
+                            <input type="search" class="bg-custom text-white flex-grow-1 border-0 align-items-center flex-column"  placeholder="Search all products...">
+                            <button type="submit" class="bg-custom border-0 d-flex justify-content-center align-items-center flex-column"><i class="fa-solid fa-magnifying-glass text-white "></i></button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Search, wishlist, cart -->
+            </div>
+        </div>
+        <!-- Right element -->
+    </div>
+</div>

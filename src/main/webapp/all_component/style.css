@@ -17,7 +17,9 @@ body {
 }
 
 a {
+    color: #528ec1;
     text-decoration: none;
+    background: transparent;
 }
 
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
@@ -26,6 +28,10 @@ a {
 
 .text-custom{
     color: #bd1e48;
+}
+
+.text-title {
+    color: #585858;
 }
 
 .dropdown:hover>.dropdown-menu {

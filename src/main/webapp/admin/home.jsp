@@ -3,13 +3,15 @@
 <html>
 <head>
     <title>Admin Dashboard</title>
-<%--    <%@include file="admin_components/head.jsp"%>--%>
-    <%@include file="../all_component/all_css.jsp"%>
+
+    <%@include file="all_css.jsp"%>
 </head>
 <body>
 <%--<%@include file="admin_components/navbar.jsp"%>--%>
 
-<div class="container-fluid py-5">
+<%@include file="head.jsp"%>
+
+<div class="container border border-primary py-5 my-5">
     <div class="row justify-content-center">
         <div class="col-md-10">
             <h1 class="text-center mb-4">Admin Dashboard</h1>
@@ -37,7 +39,7 @@
                         <div class="card-body d-flex flex-column justify-content-between">
                             <h5 class="card-title">View All Books</h5>
                             <p class="card-text">View and manage all books in the bookstore.</p>
-                            <a href="view_books.jsp" class="btn btn-success">Go</a>
+                            <a href="all_books.jsp" class="btn btn-success">Go</a>
                         </div>
                     </div>
                 </div>

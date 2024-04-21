@@ -12,6 +12,9 @@ public class Book {
     private double height;
     private double width;
 
+    public Book() {
+    }
+
     public Book(String name, String author, double price, String category, int page, String fileName, double deepth, double height, double width) {
         this.name = name;
         this.author = author;

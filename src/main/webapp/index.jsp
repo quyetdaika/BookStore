@@ -1,5 +1,8 @@
 <%@ page import="java.sql.Connection" %>
 <%@ page import="bookstore.DB.DBConnect" %>
+<%@ page import="bookstore.DAO.BookDAOIplm" %>
+<%@ page import="java.util.List" %>
+<%@ page import="bookstore.entity.Book" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -27,8 +30,16 @@
 <%@include file="all_component/carousel.jsp"%>
 <!-- Carousel -->
 
+<%
+    BookDAOIplm bookDAO = new BookDAOIplm(DBConnect.getConnection());
+    List<Book> newReleaseBooks = bookDAO.getNewReleaseBooks();
+    List<Book> saleBooks = bookDAO.getSaleBooks();
+%>
+
 <!-- Products -->
-<%@include file="all_component/product.jsp"%>
+<%@include file="all_component/new_release.jsp"%>
+<%@include file="all_component/sale_books.jsp"%>
+<%@include file="all_component/shop_for.jsp"%>
 <!-- Products -->
 
 <!-- Feature -->

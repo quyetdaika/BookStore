@@ -6,8 +6,8 @@
 <html>
 <head>
     <title>Add Book</title>
-<%--    <%@include file="admin_components/head.jsp"%>--%>
-    <%@include file="../all_component/all_css.jsp"%>
+    <%@include file="head.jsp"%>
+    <%@include file="all_css.jsp"%>
 </head>
 <body>
 <%--<%@include file="admin_components/navbar.jsp"%>--%>
@@ -46,14 +46,13 @@
                             <label for="category" class="form-label">Category</label>
                             <select class="form-select" id="category" name="category" required>
                                 <option value="" disabled selected>Select Category</option>
-                                <option value="fiction">Fiction</option>
-                                <option value="non-fiction">Non-Fiction</option>
-                                <option value="biography">Biography</option>
-                                <option value="history">History</option>
-                                <option value="science">Science</option>
-                                <option value="technology">Technology</option>
-                                <option value="self-help">Self-Help</option>
-                                <option value="travel">Travel</option>
+                                <option value="Comics & Manga">Comics & Manga</option>
+                                <option value="Anime & Characters">Anime & Characters</option>
+                                <option value="Photography">Photography</option>
+                                <option value="Learn Japanese">Learn Japanese</option>
+                                <option value="Art & Design">Art & Design</option>
+                                <option value="Dictionary">Dictionary</option>
+                                <option value="Music & Musical Score">Music & Musical Score</option>
                                 <!-- Add more category options as needed -->
                             </select>
                         </div>
