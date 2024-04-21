@@ -6,12 +6,14 @@
                 <h3 class="fw-bold">Sale Books</h3>
             </div>
             <div class="col-auto">
-                <a href="">More sale books></a>
+                <a href="collections.jsp?tag=sale-books">More sale books></a>
             </div>
         </div>
         <div class="row g-4">
             <%
+                int j = 0;
                 for(Book book : saleBooks){
+                    if(j >= 4) break;
                     String coverSrc = "book/" + book.getFileName();
             %>
             <div class="col-lg-3 col-md-6 col-12 px-5">
@@ -40,6 +42,7 @@
                 </a>
             </div>
             <%
+                    j++;
                 }
             %>
         </div>

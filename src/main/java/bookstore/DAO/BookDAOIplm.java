@@ -42,6 +42,38 @@ public class BookDAOIplm implements BookDAO {
     }
 
     @Override
+    public List<Book> getAllBooks() {
+        List<Book> allBooks = new ArrayList<>();
+
+        Book book = null;
+
+        try {
+            String sql = "select * from book";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                book = new Book();
+                book.setId(rs.getInt(1));
+                book.setName(rs.getString(2));
+                book.setAuthor(rs.getString(3));
+                book.setPrice(Double.parseDouble(rs.getString(4)));
+                book.setCategory(rs.getString(5));
+                book.setPage(Integer.parseInt(rs.getString(6)));
+                book.setDeepth(Double.parseDouble(rs.getString(7)));
+                book.setHeight(Double.parseDouble(rs.getString(8)));
+                book.setWidth(Double.parseDouble(rs.getString(9)));
+                book.setFileName(rs.getString(10));
+
+                allBooks.add(book);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return allBooks;
+    }
+
+    @Override
     public List<Book> getNewReleaseBooks() {
 
         List<Book> newReleaseBooks = new ArrayList<>();
@@ -49,13 +81,11 @@ public class BookDAOIplm implements BookDAO {
         Book book = null;
 
         try {
-            String sql = "select * from book where tag = ?";
+            String sql = "SELECT * from book order by id desc;";
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1, "New Release");
             ResultSet rs = ps.executeQuery();
 
-            int i = 0;
-            while(rs.next() && i <= 4){
+            while(rs.next()){
                 book = new Book();
                 book.setId(rs.getInt(1));
                 book.setName(rs.getString(2));
@@ -69,7 +99,6 @@ public class BookDAOIplm implements BookDAO {
                 book.setFileName(rs.getString(10));
 
                 newReleaseBooks.add(book);
-                i++;
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -89,8 +118,7 @@ public class BookDAOIplm implements BookDAO {
             ps.setString(1, "Sale Books");
             ResultSet rs = ps.executeQuery();
 
-            int i = 0;
-            while(rs.next() && i <= 4){
+            while(rs.next()){
                 book = new Book();
                 book.setId(rs.getInt(1));
                 book.setName(rs.getString(2));
@@ -104,11 +132,37 @@ public class BookDAOIplm implements BookDAO {
                 book.setFileName(rs.getString(10));
 
                 newReleaseBooks.add(book);
-                i++;
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return newReleaseBooks;
+    }
+
+    @Override
+    public List<String> getCategories() {
+        List<String> categories = new ArrayList<>();
+
+        try {
+            String sql = "select distinct category from book";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                categories.add(rs.getString(1));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return categories;
+    }
+
+    @Override
+    public List<Book> getBookByCategory(String category) {
+        List<Book> res =new ArrayList<>();
+        for(Book book : getAllBooks()){
+            if(book.getCategory().equals(category)) res.add(book);
+        }
+        return res;
     }
 }

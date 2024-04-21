@@ -3,15 +3,17 @@
     <div class="container border-top py-4">
         <div class="row align-items-center justify-content-between">
             <div class="col-auto">
-                <h2 class="fw-bold">New Release</h2>
+                <h3 class="fw-bold">New Release</h3>
             </div>
             <div class="col-auto">
-                <a href="">More new release books></a>
+                <a href="collections.jsp?tag=new-release-books">More new release books></a>
             </div>
         </div>
         <div class="row g-4">
             <%
+                int i = 0;
                 for(Book book : newReleaseBooks){
+                    if(i >= 4) break;
                     String coverSrc = "book/" + book.getFileName();
             %>
                 <div class="col-lg-3 col-md-6 col-12 px-5">
@@ -40,6 +42,7 @@
                     </a>
                 </div>
             <%
+                    i++;
                 }
             %>
         </div>

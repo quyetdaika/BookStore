@@ -1,7 +1,7 @@
 <div class="my-3 text-center bg-custom " >
     <div class="container text-white text-uppercase d-flex justify-content-between align-items-center navbar-custom">
         <div>
-            <a href="" class="nav-link p-3">new release</a>
+            <a href="collections.jsp?tag=new-release-books" class="nav-link p-3">new release</a>
         </div>
         <div class="dropdown me-3 p-3">
             <a class="nav-link dropdown-toggle" href="#" id="saleNavbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -20,7 +20,7 @@
         </div>
 
         <div class="dropdown me-3 p-3">
-            <a class="nav-link dropdown-toggle" href="#" id="mangaNavbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" href="collections.jsp" id="mangaNavbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 manga
             </a>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
