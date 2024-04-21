@@ -2,7 +2,7 @@
     <div class="row">
         <!-- Left element -->
         <div class="col-6">
-            <a href="">
+            <a href="index.jsp">
                 <img src="all_component/img/logo2%20no%20tran%20resize%20color.png" alt="" height="100">
             </a>
             <span class="small" style="font-family: 'Fira Code', monospace;">Contact with Quyet on</span>
@@ -31,9 +31,9 @@
                 <!-- Sign in & sign up -->
                 <div class="row d-flex justify-content-center m-2">
                     <span class="text-center">
-                        <a href="" class="text-custom fs-6">Sign in</a>
+                        <a href="login.jsp" class="text-custom fs-6">Sign in</a>
                         <span>or</span>
-                        <a href="" class="text-custom fs-6">Create an Account</a>
+                        <a href="register.jsp" class="text-custom fs-6">Create an Account</a>
                     </span>
                 </div>
                 <!-- Sign in & sign up -->

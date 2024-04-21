@@ -17,7 +17,9 @@ body {
 }
 
 a {
+    color: #528ec1;
     text-decoration: none;
+    background: transparent;
 }
 
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
@@ -26,6 +28,10 @@ a {
 
 .text-custom{
     color: #bd1e48;
+}
+
+.text-title {
+    color: #585858;
 }
 
 .dropdown:hover>.dropdown-menu {
@@ -40,5 +46,30 @@ a {
 .dropdown-menu .dropdown-item {
     text-transform: none;
     color: #528ec1;
+}
+
+.divider:after,
+.divider:before {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #eee;
+}
+.h-custom {
+    height: calc(100% - 73px);
+}
+@media (max-width: 450px) {
+    .h-custom {
+        height: 100%;
+    }
+}
+
+.icon-hover:hover {
+    border-color: #3b71ca !important;
+    background-color: white !important;
+}
+
+.icon-hover:hover i {
+    color: #3b71ca !important;
 }
 

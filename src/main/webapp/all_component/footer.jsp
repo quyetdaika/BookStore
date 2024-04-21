@@ -7,11 +7,11 @@
                 <!-- Grid column -->
                 <div class="col-12 col-lg-3 col-sm-12 mb-2">
                     <!-- Content -->
-                    <a href="https://mdbootstrap.com/" target="_blank" class="">
-                        <img src="https://mdbootstrap.com/img/logo/mdb-transaprent-noshadows.png" height="35" />
+                    <a href="#" target="_blank" class="">
+                        <img src="all_component/img/logo2%20no%20tran%20resize%20color.png" height="50" />
                     </a>
                     <p class="mt-2 text-dark">
-                        © 2023 Copyright: MDBootstrap.com
+                        Developed by Nguyen Van Quyet <3
                     </p>
                 </div>
                 <!-- Grid column -->
