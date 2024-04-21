@@ -41,29 +41,28 @@ public class BookDAOIplm implements BookDAO {
         return f;
     }
 
-    @Override
-    public List<Book> getAllBooks() {
+    List<Book> getBooksNoParameterIndex(String sql){
         List<Book> allBooks = new ArrayList<>();
 
         Book book = null;
 
         try {
-            String sql = "select * from book";
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()){
                 book = new Book();
-                book.setId(rs.getInt(1));
-                book.setName(rs.getString(2));
-                book.setAuthor(rs.getString(3));
-                book.setPrice(Double.parseDouble(rs.getString(4)));
-                book.setCategory(rs.getString(5));
-                book.setPage(Integer.parseInt(rs.getString(6)));
-                book.setDeepth(Double.parseDouble(rs.getString(7)));
-                book.setHeight(Double.parseDouble(rs.getString(8)));
-                book.setWidth(Double.parseDouble(rs.getString(9)));
-                book.setFileName(rs.getString(10));
+                book.setId(rs.getInt("id"));
+                book.setName(rs.getString("name"));
+                book.setAuthor(rs.getString("author"));
+                book.setPrice(Double.parseDouble(rs.getString("price")));
+                book.setCategory(rs.getString("category"));
+                book.setPage(Integer.parseInt(rs.getString("page")));
+                book.setDeepth(Double.parseDouble(rs.getString("deepth")));
+                book.setHeight(Double.parseDouble(rs.getString("height")));
+                book.setWidth(Double.parseDouble(rs.getString("width")));
+                book.setFileName(rs.getString("file_name"));
+                book.setSold(rs.getInt("sold"));
 
                 allBooks.add(book);
             }
@@ -74,36 +73,16 @@ public class BookDAOIplm implements BookDAO {
     }
 
     @Override
+    public List<Book> getAllBooks() {
+        String sql = "select * from book";
+
+        return getBooksNoParameterIndex(sql);
+    }
+
+    @Override
     public List<Book> getNewReleaseBooks() {
-
-        List<Book> newReleaseBooks = new ArrayList<>();
-
-        Book book = null;
-
-        try {
-            String sql = "SELECT * from book order by id desc;";
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-
-            while(rs.next()){
-                book = new Book();
-                book.setId(rs.getInt(1));
-                book.setName(rs.getString(2));
-                book.setAuthor(rs.getString(3));
-                book.setPrice(Double.parseDouble(rs.getString(4)));
-                book.setCategory(rs.getString(5));
-                book.setPage(Integer.parseInt(rs.getString(6)));
-                book.setDeepth(Double.parseDouble(rs.getString(7)));
-                book.setHeight(Double.parseDouble(rs.getString(8)));
-                book.setWidth(Double.parseDouble(rs.getString(9)));
-                book.setFileName(rs.getString(10));
-
-                newReleaseBooks.add(book);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return newReleaseBooks;
+        String sql = "SELECT * from book order by id desc;";
+        return getBooksNoParameterIndex(sql);
     }
 
     @Override
@@ -174,5 +153,11 @@ public class BookDAOIplm implements BookDAO {
             if(book.getName().contains(name)) books.add(book);
         }
         return books;
+    }
+
+    @Override
+    public List<Book> getBestSellerBooks() {
+        String sql = "select * from book order by sold desc";
+        return getBooksNoParameterIndex(sql);
     }
 }

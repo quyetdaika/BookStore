@@ -15,7 +15,7 @@
         </div>
 
         <div>
-            <a href="collections.jsp?tag=sale-books" class="nav-link p-3">best seller</a>
+            <a href="collections.jsp?tag=best-sellers" class="nav-link p-3">best seller</a>
         </div>
 
         <div>

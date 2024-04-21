@@ -61,8 +61,8 @@
             allBooks = bookDAO.getSaleBooks();
             filterTitle = "Sale Books";
         } else if(tagParam.equals("best-sellers")){
-//            allBooks = bookDAO.getBestSellerBooks();
-            filterTitle =  "Best Sellers Top 20";
+            allBooks = bookDAO.getBestSellerBooks();
+            filterTitle =  "Best Sellers";
         }
         else {
             allBooks = bookDAO.getBookByName("My Hero Academia");
@@ -169,6 +169,12 @@
                         queryString += "&category=" + categoryParam;
                     }
                 %>
+
+                <%if(tagParam.equals("best-sellers")){%>
+                    <div class="container text-center">
+                        <img src="all_component/img/best-seller.webp" alt="">
+                    </div>
+                <%}%>
 
                 <div class="container">
                     <div class="row">
