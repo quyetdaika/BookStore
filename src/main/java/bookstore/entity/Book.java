@@ -11,11 +11,12 @@ public class Book {
     private double deepth;
     private double height;
     private double width;
+    private int sold;
 
     public Book() {
     }
 
-    public Book(String name, String author, double price, String category, int page, String fileName, double deepth, double height, double width) {
+    public Book(String name, String author, double price, String category, int page, String fileName, double deepth, double height, double width, int sold) {
         this.name = name;
         this.author = author;
         this.price = price;
@@ -25,6 +26,15 @@ public class Book {
         this.deepth = deepth;
         this.height = height;
         this.width = width;
+        this.sold = sold;
+    }
+
+    public int getSold() {
+        return sold;
+    }
+
+    public void setSold(int sold) {
+        this.sold = sold;
     }
 
     public int getId() {

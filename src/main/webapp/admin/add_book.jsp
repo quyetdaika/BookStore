@@ -53,6 +53,9 @@
                                 <option value="Art & Design">Art & Design</option>
                                 <option value="Dictionary">Dictionary</option>
                                 <option value="Music & Musical Score">Music & Musical Score</option>
+                                <option value="DVD & Blu-ray">DVD & Blu-ray</option>
+                                <option value="CDs & Vinyl">CDs & Vinyl</option>
+                                <option value="Self-Help & Hobbies">Self-Help & Hobbies</option>
                                 <!-- Add more category options as needed -->
                             </select>
                         </div>

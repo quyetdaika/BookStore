@@ -165,4 +165,14 @@ public class BookDAOIplm implements BookDAO {
         }
         return res;
     }
+
+    @Override
+    public List<Book> getBookByName(String name) {
+        List<Book> books = new ArrayList<>();
+
+        for(Book book : getAllBooks()){
+            if(book.getName().contains(name)) books.add(book);
+        }
+        return books;
+    }
 }

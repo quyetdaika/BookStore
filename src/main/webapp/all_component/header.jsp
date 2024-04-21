@@ -8,17 +8,17 @@
             <span class="small" style="font-family: 'Fira Code', monospace;">Contact with Quyet on</span>
 
             <!-- Facebook -->
-            <a data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm ml-2" style="background-color: #3b5998;" href="#!" role="button"
+            <a data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm ml-2" style="background-color: #3b5998;" href="https://www.facebook.com/nvq29Apr/" role="button"
             ><i class="fab fa-facebook-f fa-fw"></i
             ></a>
 
             <!-- Github -->
-            <a data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm" style="background-color: #333333;" href="#!" role="button"
+            <a data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm" style="background-color: #333333;" href="https://github.com/nvq29Apr" role="button"
             ><i class="fab fa-github fa-fw"></i
             ></a>
 
             <!-- Slack -->
-            <a data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm" style="background-color: #481449;" href="#!" role="button"
+            <a data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm" style="background-color: #481449;" href="https://app.slack.com/client/T02QFU9TCTD/D05JL21JNT0" role="button"
             ><i class="fab fa-slack-hash fa-fw"></i
             ></a>
         </div>

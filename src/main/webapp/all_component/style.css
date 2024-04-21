@@ -73,3 +73,7 @@ a {
     color: #3b71ca !important;
 }
 
+.input-group input:focus {
+    outline: none;
+    box-shadow: none;
+}

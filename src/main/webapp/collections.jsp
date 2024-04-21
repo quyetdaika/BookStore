@@ -33,8 +33,8 @@
 
 <%
     BookDAOIplm bookDAO = new BookDAOIplm(DBConnect.getConnection());
-    List<String> categories = bookDAO.getCategories();
-    List<Book> allBooks = new ArrayList<>();
+//    List<String> categories = bookDAO.getCategories();
+    List<Book> allBooks = bookDAO.getAllBooks();
 
     String tagParam = request.getParameter("tag");
     String categoryParam = request.getParameter("category");
@@ -46,16 +46,27 @@
     categoryMap.put("photography", "Photography");
     categoryMap.put("art-design", "Art & Design");
     categoryMap.put("music-musical", "Music & Musical Score");
+    categoryMap.put("dictionary", "Dictionary");
+    categoryMap.put("dvd-blu-ray", "DVD & Blu-ray");
+    categoryMap.put("cds-vinyl", "CDs & Vinyl");
+    categoryMap.put("self-help-hobbies", "Self-Help & Hobbies");
 
-    String filterTitle = "";
+    String filterTitle = "Collections";
 
     if(tagParam != null){
         if(tagParam.equals("new-release-books")){
             allBooks = bookDAO.getNewReleaseBooks();
             filterTitle = "New Release Books";
-        } else {
+        } else if(tagParam.equals("sale-books")) {
             allBooks = bookDAO.getSaleBooks();
             filterTitle = "Sale Books";
+        } else if(tagParam.equals("best-sellers")){
+//            allBooks = bookDAO.getBestSellerBooks();
+            filterTitle =  "Best Sellers Top 20";
+        }
+        else {
+            allBooks = bookDAO.getBookByName("My Hero Academia");
+            filterTitle = "My Hero Academia";
         }
     }
 
