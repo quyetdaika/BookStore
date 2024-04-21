@@ -170,7 +170,7 @@
                     }
                 %>
 
-                <%if(tagParam.equals("best-sellers")){%>
+                <%if(tagParam != null && tagParam.equals("best-sellers")){%>
                     <div class="container text-center">
                         <img src="all_component/img/best-seller.webp" alt="">
                     </div>
