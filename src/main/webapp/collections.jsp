@@ -1,13 +1,10 @@
 <%@ page import="java.sql.Connection" %>
 <%@ page import="bookstore.DB.DBConnect" %>
 <%@ page import="bookstore.DAO.BookDAOIplm" %>
-<%@ page import="java.util.List" %>
 <%@ page import="bookstore.entity.Book" %>
 <%@ page import="java.net.URLDecoder" %>
-<%@ page import="java.util.Map" %>
-<%@ page import="java.util.HashMap" %>
 <%@ page import="bookstore.DAO.BookDAO" %>
-<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.*" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -38,6 +35,7 @@
 
     String tagParam = request.getParameter("tag");
     String categoryParam = request.getParameter("category");
+    String sortByParam = request.getParameter("sort_by");
 
     Map<String, String> categoryMap = new HashMap<String, String>();
     categoryMap.put("comics-manga", "Comics & Manga");
@@ -74,6 +72,36 @@
         filterTitle = categoryMap.get(categoryParam);
         allBooks = bookDAO.getBookByCategory(filterTitle);
         System.out.println(allBooks.size());
+    }
+
+    if(sortByParam != null){
+//        allBooks = bookDAO.getBookBySortBy(sortByParam);
+        if(sortByParam.equals("best-selling")) {
+            allBooks.sort(new Comparator<Book>() {
+                @Override
+                public int compare(Book o1, Book o2) {
+                    return o2.getSold() - o1.getSold();
+                }
+            });
+        }
+        else {
+            String field = sortByParam.split("-")[0];
+            String order = sortByParam.split("-")[1];
+            allBooks.sort(new Comparator<Book>() {
+                @Override
+                public int compare(Book o1, Book o2) {
+                    if (order.equals("asc")) {
+                        if (field.equals("name")) {
+                            return o1.getName().compareTo(o2.getName());
+                        } else return Double.compare(o1.getPrice(), o2.getPrice());
+                    } else {
+                        if (field.equals("name")) {
+                            return o2.getName().compareTo(o1.getName());
+                        } else return Double.compare(o2.getPrice(), o1.getPrice());
+                    }
+                }
+            });
+        }
     }
 %>
 
@@ -121,11 +149,13 @@
                     <h3 class="fw-bold"><%=filterTitle%></h3>
                     <strong class="d-block py-2 mx-4"><%=allBooks.size()%> Items found </strong>
                     <div class="ms-auto">
-                        <select class="form-select d-inline-block w-auto border pt-1">
-                            <option value="0">Best match</option>
-                            <option value="1">Recommended</option>
-                            <option value="2">High rated</option>
-                            <option value="3">Randomly</option>
+                        <span>Sort by</span>
+                        <select class="form-select d-inline-block w-auto border pt-1" onchange="sortBooks(this)">
+                            <option value="best-selling" <%= sortByParam == null || sortByParam.equals("best-selling") ? "selected" : "" %>>Best selling</option>
+                            <option value="name-asc" <%= sortByParam != null && sortByParam.equals("name-asc") ? "selected" : "" %>>Alphabetically A-Z</option>
+                            <option value="name-desc" <%= sortByParam != null && sortByParam.equals("name-desc") ? "selected" : "" %>>Alphabetically Z-A</option>
+                            <option value="price-asc" <%= sortByParam != null && sortByParam.equals("price-asc") ? "selected" : "" %>>Price, low to high</option>
+                            <option value="price-desc" <%= sortByParam != null && sortByParam.equals("price-desc") ? "selected" : "" %>>Price, high to low</option>
                         </select>
                         <div class="btn-group shadow-0 border">
                             <a href="#" class="btn btn-light" title="List view">
@@ -243,5 +273,16 @@
 <!-- Footer -->
 <%@include file="all_component/footer.jsp"%>
 <!-- Footer -->
+
+<script>
+    function sortBooks(select) {
+        var sortBy = select.value;
+        var urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('sort_by', sortBy);
+        window.location.href = window.location.pathname + '?' + urlParams.toString();
+    }
+</script>
+
+
 </body>
 </html>

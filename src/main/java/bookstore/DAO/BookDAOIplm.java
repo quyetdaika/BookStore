@@ -160,4 +160,17 @@ public class BookDAOIplm implements BookDAO {
         String sql = "select * from book order by sold desc";
         return getBooksNoParameterIndex(sql);
     }
+
+    @Override
+    public List<Book> getBookBySortBy(String sortByParam) {
+        if(sortByParam.equals("best-selling")) return getBestSellerBooks();
+
+        String sql = "select * from book order by "
+                + sortByParam.split("-")[0]
+                + " "
+                + sortByParam.split("-")[1]
+                + ";";
+
+        return getBooksNoParameterIndex(sql);
+    }
 }
