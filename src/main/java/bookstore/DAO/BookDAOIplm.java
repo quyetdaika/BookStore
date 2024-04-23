@@ -162,15 +162,8 @@ public class BookDAOIplm implements BookDAO {
     }
 
     @Override
-    public List<Book> getBookBySortBy(String sortByParam) {
-        if(sortByParam.equals("best-selling")) return getBestSellerBooks();
-
-        String sql = "select * from book order by "
-                + sortByParam.split("-")[0]
-                + " "
-                + sortByParam.split("-")[1]
-                + ";";
-
+    public List<Book> getBookByKeyword(String keyword) {
+        String sql = "select * from book where name like '%" + keyword + "%'";
         return getBooksNoParameterIndex(sql);
     }
 }

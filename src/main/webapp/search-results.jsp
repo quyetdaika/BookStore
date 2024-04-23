@@ -36,6 +36,7 @@
     String tagParam = request.getParameter("tag");
     String categoryParam = request.getParameter("category");
     String sortByParam = request.getParameter("sort_by");
+    String qParam = request.getParameter("q");
 
     Map<String, String> categoryMap = new HashMap<String, String>();
     categoryMap.put("comics-manga", "Comics & Manga");
@@ -49,7 +50,11 @@
     categoryMap.put("cds-vinyl", "CDs & Vinyl");
     categoryMap.put("self-help-hobbies", "Self-Help & Hobbies");
 
-    String filterTitle = "Collections";
+    String filterTitle = "Search Results";
+
+    if(qParam != null){
+        allBooks = bookDAO.getBookByKeyword(qParam);
+    }
 
     if(tagParam != null){
         if(tagParam.equals("new-release-books")){
@@ -69,12 +74,15 @@
     }
 
     if(categoryParam != null){
-        filterTitle = categoryMap.get(categoryParam);
-        allBooks = bookDAO.getBookByCategory(filterTitle);
-        System.out.println(allBooks.size());
+//        filterTitle = categoryMap.get(categoryParam);
+//        allBooks = bookDAO.getBookByCategory(categoryMap.get(categoryParam));
+        List<Book> filterByCategoryBooks = new ArrayList<>();
+        for(Book book : allBooks) if(book.getCategory().equals(categoryMap.get(categoryParam))) filterByCategoryBooks.add(book);
+        allBooks = filterByCategoryBooks;
     }
 
     if(sortByParam != null){
+//        allBooks = bookDAO.getBookBySortBy(sortByParam);
         if(sortByParam.equals("best-selling")) {
             allBooks.sort(new Comparator<Book>() {
                 @Override
@@ -108,10 +116,7 @@
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb text-title">
             <li class="breadcrumb-item"><a href="index.jsp">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Collections</li>
-            <%if(categoryParam != null) {%>
-            <li class="breadcrumb-item active" aria-current="page"><%=filterTitle%></li>
-            <%}%>
+            <li class="breadcrumb-item active" aria-current="page">Search Results</li>
         </ol>
     </nav>
 </div>
@@ -147,9 +152,9 @@
             <!-- sidebar -->
             <!-- content -->
             <div class="col-lg-9">
-                <header class="d-sm-flex align-items-center mb-4 pb-3">
+                <header class="d-sm-flex align-items-center mb-4 pb-3 border-bottom">
                     <h3 class="fw-bold"><%=filterTitle%></h3>
-                    <strong class="d-block py-2 mx-4"><%=allBooks.size()%> Items found </strong>
+
                     <div class="ms-auto">
                         <span>Sort by</span>
                         <select class="form-select d-inline-block w-auto border pt-1" onchange="sortBooks(this)">
@@ -202,11 +207,10 @@
                     }
                 %>
 
-                <%if(tagParam != null && tagParam.equals("best-sellers")){%>
-                    <div class="container text-center">
-                        <img src="all_component/img/best-seller.webp" alt="">
-                    </div>
-                <%}%>
+                <p class="text-custom">
+                    Showing <strong class="d-inline-block py-2"><%=allBooks.size()%></strong>
+                    results for "<%=qParam%>"
+                </p>
 
                 <div class="container">
                     <div class="row">
@@ -275,5 +279,6 @@
 <!-- Footer -->
 <%@include file="all_component/footer.jsp"%>
 <!-- Footer -->
+
 </body>
 </html>

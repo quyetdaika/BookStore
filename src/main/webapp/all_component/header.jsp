@@ -41,8 +41,9 @@
                 <!-- Search, wishlist, cart -->
                 <div class="row text-center">
                     <div class="col-9 bg-custom py-3">
-                        <form action="" class="input-group ">
-                            <input type="search" class="bg-custom text-white flex-grow-1 border-0 align-items-center flex-column"  placeholder="Search all products...">
+                        <form action="search-results.jsp" class="input-group" id="searchForm">
+                            <input type="search" class="bg-custom text-white flex-grow-1 border-0 align-items-center flex-column" id="searchInput" placeholder="Search all products...">
+                            <input type="hidden" name="q" id="searchQuery">
                             <button type="submit" class="bg-custom border-0 d-flex justify-content-center align-items-center flex-column"><i class="fa-solid fa-magnifying-glass text-white "></i></button>
                         </form>
                     </div>
@@ -61,3 +62,20 @@
         <!-- Right element -->
     </div>
 </div>
+
+<script>
+    // Lắng nghe sự kiện submit của form
+    document.getElementById('searchForm').addEventListener('submit', function(event) {
+        // Ngăn chặn hành vi mặc định của form
+        event.preventDefault();
+
+        // Lấy giá trị nhập từ ô tìm kiếm
+        var searchValue = document.getElementById('searchInput').value;
+
+        // Gán giá trị nhập vào input ẩn
+        document.getElementById('searchQuery').value = searchValue;
+
+        // Gửi form
+        this.submit();
+    });
+</script>
