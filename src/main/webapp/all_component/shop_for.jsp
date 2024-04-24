@@ -2,7 +2,7 @@
     <div class="container border-top py-4">
         <div class="row align-items-center justify-content-between">
             <div class="col-auto">
-                <h3 class="fw-bold">Shop For</h3>
+                <h4 class="fw-bold">Shop For</h4>
             </div>
             <div class="col-auto">
                 <a href="collections.jsp">More categories></a>

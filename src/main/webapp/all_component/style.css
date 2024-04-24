@@ -1,6 +1,7 @@
 body {
     font-family: 'Montserrat', sans-serif;
     font-size: 14px;
+    color: #585858;
 }
 
 .icon-hover:hover {
@@ -77,3 +78,33 @@ a {
     outline: none;
     box-shadow: none;
 }
+
+.btn-wishlist {
+    background-color: rgb(237, 53, 111);
+    opacity: 0.9;
+    color: rgb(255, 255, 255);
+    border: none;
+    line-height: normal;
+    height: 40px;
+    padding: 10px 20px;
+    text-align: center;
+    /*overflow: hidden;*/
+    outline: none;
+    position: relative;
+    cursor: pointer;
+}
+
+.btn-add-to-cart {
+    background-color: #fff;
+    border: 2px solid #528ec1;
+    color: #528ec1;
+    padding: 10px 20px;
+    text-align: center;
+}
+
+.btn-wishlist,
+.btn-add-to-cart {
+    display: inline-block; /* Sử dụng inline-block để nút không chiếm toàn bộ chiều rộng của container */
+    margin-bottom: 10px; /* Thêm margin dưới để tạo khoảng cách giữa hai nút */
+}
+

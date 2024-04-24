@@ -212,7 +212,7 @@
                     <div class="row">
                         <% for (Book book : currentPageBooks) { %>
                         <div class="col-lg-3 col-md-6 col-sm-6 d-flex">
-                            <a href="">
+                            <a href="product-detail.jsp?bookID=<%=book.getId()%>">
                                 <div class="card border-0">
                                     <img src="<%= URLDecoder.decode("book/" + book.getFileName(), "UTF-8") %>" class="card-img-top img-fluid mx-auto d-block p-4" alt="...">
                                     <div class="card-body">

@@ -74,8 +74,6 @@
     }
 
     if(categoryParam != null){
-//        filterTitle = categoryMap.get(categoryParam);
-//        allBooks = bookDAO.getBookByCategory(categoryMap.get(categoryParam));
         List<Book> filterByCategoryBooks = new ArrayList<>();
         for(Book book : allBooks) if(book.getCategory().equals(categoryMap.get(categoryParam))) filterByCategoryBooks.add(book);
         allBooks = filterByCategoryBooks;
@@ -116,10 +114,14 @@
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb text-title">
             <li class="breadcrumb-item"><a href="index.jsp">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Search Results</li>
+            <li class="breadcrumb-item active" aria-current="page">Collections</li>
+            <%if(categoryParam != null) {%>
+            <li class="breadcrumb-item active" aria-current="page"><%=filterTitle%></li>
+            <%}%>
         </ol>
     </nav>
 </div>
+
 
 
 <!-- sidebar + content -->
@@ -216,7 +218,7 @@
                     <div class="row">
                         <% for (Book book : currentPageBooks) { %>
                         <div class="col-lg-3 col-md-6 col-sm-6 d-flex">
-                            <a href="">
+                            <a href="product-detail.jsp?bookID=<%=book.getId()%>">
                                 <div class="card border-0">
                                     <img src="<%= URLDecoder.decode("book/" + book.getFileName(), "UTF-8") %>" class="card-img-top img-fluid mx-auto d-block p-4" alt="...">
                                     <div class="card-body">

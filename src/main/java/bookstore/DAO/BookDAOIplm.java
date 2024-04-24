@@ -72,6 +72,39 @@ public class BookDAOIplm implements BookDAO {
         return allBooks;
     }
 
+    List<Book> getBooksWithParameterIndex(String sql, String... pamameters){
+        List<Book> allBooks = new ArrayList<>();
+
+        Book book = null;
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            for(int i = 0; i < pamameters.length; i++){
+                ps.setString(i + 1, pamameters[i]);
+            }
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                book = new Book();
+                book.setId(rs.getInt("id"));
+                book.setName(rs.getString("name"));
+                book.setAuthor(rs.getString("author"));
+                book.setPrice(Double.parseDouble(rs.getString("price")));
+                book.setCategory(rs.getString("category"));
+                book.setPage(Integer.parseInt(rs.getString("page")));
+                book.setDeepth(Double.parseDouble(rs.getString("deepth")));
+                book.setHeight(Double.parseDouble(rs.getString("height")));
+                book.setWidth(Double.parseDouble(rs.getString("width")));
+                book.setFileName(rs.getString("file_name"));
+                book.setSold(rs.getInt("sold"));
+
+                allBooks.add(book);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return allBooks;
+    }
+
     @Override
     public List<Book> getAllBooks() {
         String sql = "select * from book";
@@ -87,52 +120,16 @@ public class BookDAOIplm implements BookDAO {
 
     @Override
     public List<Book> getSaleBooks() {
-        List<Book> newReleaseBooks = new ArrayList<>();
-
-        Book book = null;
-
-        try {
-            String sql = "select * from book where tag = ?";
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1, "Sale Books");
-            ResultSet rs = ps.executeQuery();
-
-            while(rs.next()){
-                book = new Book();
-                book.setId(rs.getInt(1));
-                book.setName(rs.getString(2));
-                book.setAuthor(rs.getString(3));
-                book.setPrice(Double.parseDouble(rs.getString(4)));
-                book.setCategory(rs.getString(5));
-                book.setPage(Integer.parseInt(rs.getString(6)));
-                book.setDeepth(Double.parseDouble(rs.getString(7)));
-                book.setHeight(Double.parseDouble(rs.getString(8)));
-                book.setWidth(Double.parseDouble(rs.getString(9)));
-                book.setFileName(rs.getString(10));
-
-                newReleaseBooks.add(book);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return newReleaseBooks;
+        String sql = "select * from book where tag = ?";
+        return getBooksWithParameterIndex(sql, "Sale Books");
     }
 
     @Override
     public List<String> getCategories() {
         List<String> categories = new ArrayList<>();
-
-        try {
-            String sql = "select distinct category from book";
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-
-            while(rs.next()){
-                categories.add(rs.getString(1));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        String sql = "select distinct category from book";
+        List<Book> allBooks = getBooksNoParameterIndex(sql);
+        for(Book book : allBooks) categories.add(book.getCategory());
         return categories;
     }
 
@@ -163,7 +160,14 @@ public class BookDAOIplm implements BookDAO {
 
     @Override
     public List<Book> getBookByKeyword(String keyword) {
-        String sql = "select * from book where name like '%" + keyword + "%'";
-        return getBooksNoParameterIndex(sql);
+        String sql = "select * from book where name like ?";
+        String keywordWithWildcard = "%" + keyword + "%";
+        return getBooksWithParameterIndex(sql, keywordWithWildcard);
+    }
+
+    @Override
+    public Book getBookByID(String bookID) {
+        String sql = "select * from book where id = ?";
+        return getBooksWithParameterIndex(sql, bookID).get(0);
     }
 }
