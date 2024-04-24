@@ -108,3 +108,13 @@ a {
     margin-bottom: 10px; /* Thêm margin dưới để tạo khoảng cách giữa hai nút */
 }
 
+.toast {
+    max-width: 400px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.toast-header {
+    border-radius: 8px 8px 0 0;
+}

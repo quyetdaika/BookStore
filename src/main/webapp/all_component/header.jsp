@@ -1,3 +1,11 @@
+<%@ page import="bookstore.entity.User" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page isELIgnored="false" %>
+
+<%
+    User user = (User)session.getAttribute("userObj");
+%>
+
 <div class="container">
     <div class="row">
         <!-- Left element -->
@@ -28,15 +36,25 @@
         <!-- Right element -->
         <div class="col-6">
             <div class="container align-items-center flex-column">
+                <%if(user != null){%>
+                    <div class="row d-flex justify-content-center m-2">
+                        <span class="text-center">
+                            <i class="fa-regular fa-user fs-6"></i>
+                            <span class="fw-bold fs-6"><%=user.getEmail()%></span>
+                            <span class="mx-2"><a href="logout" class="text-custom fs-6">Sign out</a></span>
+                        </span>
+                    </div>
+                <%} else {%>
                 <!-- Sign in & sign up -->
-                <div class="row d-flex justify-content-center m-2">
-                    <span class="text-center">
-                        <a href="login.jsp" class="text-custom fs-6">Sign in</a>
-                        <span>or</span>
-                        <a href="register.jsp" class="text-custom fs-6">Create an Account</a>
-                    </span>
-                </div>
-                <!-- Sign in & sign up -->
+                    <div class="row d-flex justify-content-center m-2">
+                        <span class="text-center">
+                            <a href="login.jsp" class="text-custom fs-6">Sign in</a>
+                            <span>or</span>
+                            <a href="register.jsp" class="text-custom fs-6">Create an Account</a>
+                        </span>
+                    </div>
+                    <!-- Sign in & sign up -->
+                <%}%>
 
                 <!-- Search, wishlist, cart -->
                 <div class="row text-center">

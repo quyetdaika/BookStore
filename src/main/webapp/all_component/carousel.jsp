@@ -6,7 +6,7 @@
         </div>
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img src="all_component/img/banner3.webp" class="d-block w-100" alt="...">
+                <img src="all_component/img/banner4.webp" class="d-block w-100" alt="...">
             </div>
             <div class="carousel-item">
                 <img src="all_component/img/banner2.webp" class="d-block w-100" alt="...">

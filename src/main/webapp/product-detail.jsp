@@ -4,6 +4,8 @@
 <html>
 <head>
     <title>Book Store</title>
+    <link rel="icon" type="image/png" href="all_component/img/logo%20no%20title.png">
+
     <%@include file="all_component/all_css.jsp"%>
 </head>
 
@@ -47,10 +49,10 @@
 <section class="py-5">
     <div class="container">
         <div class="row">
-            <div class="col-lg-6">
-                <img style="max-width: 80%; max-height: 80vh; margin: auto;" class="fit" src="book/<%=currentBook.getFileName()%>" />
+            <div class="col-lg-4">
+                <img style="max-width: 100%; max-height: 100vh; margin: auto;" class="fit" src="book/<%=currentBook.getFileName()%>" />
             </div>
-            <main class="col-lg-6" style="padding-left: 0">
+            <main class="col-lg-8" style="padding-left: 80px">
                 <div>
                     <h4 class="title text-dark fw-bold">
                         <%=currentBook.getName()%>
@@ -97,7 +99,7 @@
                             </div>
                         </div>
                     </div>
-                    <%--                    <a href="#" class="btn shadow-0"> Buy now </a> <br>--%>
+
                     <div class="my-2">
                         <a href="#" class="btn-add-to-cart">
                             <i class="fa-solid fa-cart-plus mx-2" ></i>ADD TO CART
@@ -105,7 +107,7 @@
                     </div>
 
                     <div>
-                        <a href="#" class="btn-wishlist">
+                        <a href="#" class="btn-wishlist" id="btn-wishlist">
                             <i class="fa-regular fa-heart mx-2"></i> ADD TO WISHLIST
                         </a>
                     </div>
@@ -170,6 +172,33 @@
 <%@include file="all_component/footer.jsp"%>
 <!-- Footer -->
 
+<!-- Toast thông báo -->
+<div aria-live="polite" aria-atomic="true" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div id="loginToAddWishlistToast" class="toast" role="alert" style="background-color: #EF497D">
+        <div class="toast-body">
+            <div class="d-flex gap-4" style="color: white">
+                <span><i class="fa-regular fa-user fs-6"></i></span>
+                <div class="d-flex flex-grow-1 align-items-center">
+                    <span class="fw-semibold">Please login to save your wishlist across devices.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div aria-live="polite" aria-atomic="true" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div id="addToWishlistSuccessToast" class="toast" role="alert" style="background-color: #EF497D">
+        <div class="toast-body">
+            <div class="d-flex gap-4" style="color: white">
+                <span><i class="fa-regular fa-heart mx-2"></i></span>
+                <div class="d-flex flex-grow-1 align-items-center">
+                    <span class="fw-semibold">Add to Wishlist success</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     // Lấy tham chiếu đến các phần tử DOM
     var decreaseButton = document.getElementById("decreaseButton");
@@ -193,6 +222,29 @@
             quantityInput.value = 1; // Nếu giá trị không hợp lệ, đặt giá trị mặc định là 1
         }
     });
+</script>
+
+<script>
+    // Lấy tham chiếu đến toast
+    var loginToAddWishlistToast = document.getElementById('loginToAddWishlistToast');
+    var addToWishlistSuccessToast = document.getElementById('addToWishlistSuccessToast');
+
+    // Xử lý sự kiện nhấn vào nút "Add to Wishlist"
+    document.getElementById('btn-wishlist').addEventListener('click', function(event) {
+        event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+
+        // Kiểm tra trạng thái đăng nhập
+        <%if (user == null) {%>
+            // Hiển thị toast nếu chưa đăng nhập
+            var toast = new bootstrap.Toast(loginToAddWishlistToast);
+            toast.show();
+        <%} else {%>
+            // Xử lý thêm sản phẩm vào Wishlist nếu đã đăng nhập
+            var toast = new bootstrap.Toast(addToWishlistSuccessToast);
+            toast.show();
+        <%}%>
+    });
+
 </script>
 
 </body>

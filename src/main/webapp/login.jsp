@@ -6,6 +6,8 @@
 <html>
 <head>
     <title>Book Store</title>
+    <link rel="icon" type="image/png" href="all_component/img/logo%20no%20title.png">
+
     <%@include file="all_component/all_css.jsp"%>
 </head>
 <body>
@@ -25,8 +27,8 @@
 </header>
 
 <!-- Login  form -->
-<section class="vh-100" style="background-color: #eee;">
-    <div class="container h-100">
+<section class="" style="background-color: #eee;">
+    <div class="container py-5">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-lg-12 col-xl-11">
                 <div class="card text-black" style="border-radius: 25px;">
@@ -39,10 +41,11 @@
                                 <form action="login" method="post">
                                     <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign in</p>
 
-                                    <c:if test="${not empty failedMsg}">
-                                        <p class="text-center text-danger">${failedMsg}</p>
-                                        <c:remove var="failedMsg" scope="session"></c:remove>
-                                    </c:if>
+<%--                                    <c:if test="${not empty failedMsg}">--%>
+<%--                                        <p class="text-center text-danger">${failedMsg}</p>--%>
+<%--                                        <c:remove var="failedMsg" scope="session"></c:remove>--%>
+<%--                                    </c:if>--%>
+
                                     <!-- Email input -->
                                     <div class="d-flex flex-row align-items-center mb-4">
                                         <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
@@ -85,13 +88,34 @@
         </div>
     </div>
 </section>
-
-
 <!-- Login form -->
 
 <!-- Footer -->
 <%@include file="all_component/footer.jsp"%>
 <!-- Footer -->
+
+<!-- Toast thông báo -->
+<div aria-live="polite" aria-atomic="true" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div id="loginErrorToast" class="toast text-bg-danger" role="alert">
+        <div class="toast-body">
+            <div class="d-flex gap-4">
+                <span><i class="fa-solid fa-circle-check fa-lg"></i></span>
+                <div class="d-flex flex-grow-1 align-items-center">
+                    <span class="fw-semibold">${failedMsg}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    <c:if test="${not empty failedMsg}">
+    var errorToast = document.getElementById('loginErrorToast');
+    var toast = new bootstrap.Toast(errorToast);
+    toast.show();
+    <c:remove var="failedMsg" scope="session"></c:remove>
+    </c:if>
+</script>
 
 </body>
 </html>
