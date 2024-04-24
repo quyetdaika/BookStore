@@ -1,13 +1,10 @@
 <%@ page import="java.sql.Connection" %>
 <%@ page import="bookstore.DB.DBConnect" %>
 <%@ page import="bookstore.DAO.BookDAOIplm" %>
-<%@ page import="java.util.List" %>
 <%@ page import="bookstore.entity.Book" %>
 <%@ page import="java.net.URLDecoder" %>
-<%@ page import="java.util.Map" %>
-<%@ page import="java.util.HashMap" %>
 <%@ page import="bookstore.DAO.BookDAO" %>
-<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.*" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -33,11 +30,12 @@
 
 <%
     BookDAOIplm bookDAO = new BookDAOIplm(DBConnect.getConnection());
-    List<String> categories = bookDAO.getCategories();
-    List<Book> allBooks = new ArrayList<>();
+//    List<String> categories = bookDAO.getCategories();
+    List<Book> allBooks = bookDAO.getAllBooks();
 
     String tagParam = request.getParameter("tag");
     String categoryParam = request.getParameter("category");
+    String sortByParam = request.getParameter("sort_by");
 
     Map<String, String> categoryMap = new HashMap<String, String>();
     categoryMap.put("comics-manga", "Comics & Manga");
@@ -46,16 +44,27 @@
     categoryMap.put("photography", "Photography");
     categoryMap.put("art-design", "Art & Design");
     categoryMap.put("music-musical", "Music & Musical Score");
+    categoryMap.put("dictionary", "Dictionary");
+    categoryMap.put("dvd-blu-ray", "DVD & Blu-ray");
+    categoryMap.put("cds-vinyl", "CDs & Vinyl");
+    categoryMap.put("self-help-hobbies", "Self-Help & Hobbies");
 
-    String filterTitle = "";
+    String filterTitle = "Collections";
 
     if(tagParam != null){
         if(tagParam.equals("new-release-books")){
             allBooks = bookDAO.getNewReleaseBooks();
             filterTitle = "New Release Books";
-        } else {
+        } else if(tagParam.equals("sale-books")) {
             allBooks = bookDAO.getSaleBooks();
             filterTitle = "Sale Books";
+        } else if(tagParam.equals("best-sellers")){
+            allBooks = bookDAO.getBestSellerBooks();
+            filterTitle =  "Best Sellers";
+        }
+        else {
+            allBooks = bookDAO.getBookByName("My Hero Academia");
+            filterTitle = "My Hero Academia";
         }
     }
 
@@ -63,6 +72,35 @@
         filterTitle = categoryMap.get(categoryParam);
         allBooks = bookDAO.getBookByCategory(filterTitle);
         System.out.println(allBooks.size());
+    }
+
+    if(sortByParam != null){
+        if(sortByParam.equals("best-selling")) {
+            allBooks.sort(new Comparator<Book>() {
+                @Override
+                public int compare(Book o1, Book o2) {
+                    return o2.getSold() - o1.getSold();
+                }
+            });
+        }
+        else {
+            String field = sortByParam.split("-")[0];
+            String order = sortByParam.split("-")[1];
+            allBooks.sort(new Comparator<Book>() {
+                @Override
+                public int compare(Book o1, Book o2) {
+                    if (order.equals("asc")) {
+                        if (field.equals("name")) {
+                            return o1.getName().compareTo(o2.getName());
+                        } else return Double.compare(o1.getPrice(), o2.getPrice());
+                    } else {
+                        if (field.equals("name")) {
+                            return o2.getName().compareTo(o1.getName());
+                        } else return Double.compare(o2.getPrice(), o1.getPrice());
+                    }
+                }
+            });
+        }
     }
 %>
 
@@ -85,14 +123,17 @@
         <div class="row">
             <!-- sidebar -->
             <div class="col-lg-3">
-                <h4 class="fw-bold">Category</h4>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="fw-bold">Category</h4>
+                    <button class="btn btn-outline-warning btn-sm" onclick="clearCategory()">Clear</button>
+                </div>
                 <div class="border-top py-2">
                     <ul class="list-unstyled px-3">
                         <%for(Map.Entry<String, String> entry : categoryMap.entrySet()) {%>
                         <li class="my-2">
-                            <a href="collections.jsp?category=<%=entry.getKey()%>" class="text-title icon-hover">
-                            <%if(entry.getValue().equals(filterTitle)) {%>
-                                    <i class="fa-regular fa-circle-dot"></i>
+                            <a href="javascript:void(0);" class="text-title icon-hover" onclick="updateCategory('<%=entry.getKey()%>')">
+                                <%if(entry.getValue().equals(categoryMap.get(categoryParam))) {%>
+                                <i class="fa-regular fa-circle-dot"></i>
                                 <%} else {%>
                                 <i class="fa-regular fa-circle"></i>
                                 <%}%>
@@ -110,11 +151,13 @@
                     <h3 class="fw-bold"><%=filterTitle%></h3>
                     <strong class="d-block py-2 mx-4"><%=allBooks.size()%> Items found </strong>
                     <div class="ms-auto">
-                        <select class="form-select d-inline-block w-auto border pt-1">
-                            <option value="0">Best match</option>
-                            <option value="1">Recommended</option>
-                            <option value="2">High rated</option>
-                            <option value="3">Randomly</option>
+                        <span>Sort by</span>
+                        <select class="form-select d-inline-block w-auto border pt-1" onchange="sortBooks(this)">
+                            <option value="best-selling" <%= sortByParam == null || sortByParam.equals("best-selling") ? "selected" : "" %>>Best selling</option>
+                            <option value="name-asc" <%= sortByParam != null && sortByParam.equals("name-asc") ? "selected" : "" %>>Alphabetically A-Z</option>
+                            <option value="name-desc" <%= sortByParam != null && sortByParam.equals("name-desc") ? "selected" : "" %>>Alphabetically Z-A</option>
+                            <option value="price-asc" <%= sortByParam != null && sortByParam.equals("price-asc") ? "selected" : "" %>>Price, low to high</option>
+                            <option value="price-desc" <%= sortByParam != null && sortByParam.equals("price-desc") ? "selected" : "" %>>Price, high to low</option>
                         </select>
                         <div class="btn-group shadow-0 border">
                             <a href="#" class="btn btn-light" title="List view">
@@ -159,11 +202,17 @@
                     }
                 %>
 
+                <%if(tagParam != null && tagParam.equals("best-sellers")){%>
+                    <div class="container text-center">
+                        <img src="all_component/img/best-seller.webp" alt="">
+                    </div>
+                <%}%>
+
                 <div class="container">
                     <div class="row">
                         <% for (Book book : currentPageBooks) { %>
                         <div class="col-lg-3 col-md-6 col-sm-6 d-flex">
-                            <a href="">
+                            <a href="product-detail.jsp?bookID=<%=book.getId()%>">
                                 <div class="card border-0">
                                     <img src="<%= URLDecoder.decode("book/" + book.getFileName(), "UTF-8") %>" class="card-img-top img-fluid mx-auto d-block p-4" alt="...">
                                     <div class="card-body">

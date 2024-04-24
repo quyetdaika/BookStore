@@ -8,17 +8,17 @@
             <span class="small" style="font-family: 'Fira Code', monospace;">Contact with Quyet on</span>
 
             <!-- Facebook -->
-            <a data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm ml-2" style="background-color: #3b5998;" href="#!" role="button"
+            <a data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm ml-2" style="background-color: #3b5998;" href="https://www.facebook.com/nvq29Apr/" role="button"
             ><i class="fab fa-facebook-f fa-fw"></i
             ></a>
 
             <!-- Github -->
-            <a data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm" style="background-color: #333333;" href="#!" role="button"
+            <a data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm" style="background-color: #333333;" href="https://github.com/nvq29Apr" role="button"
             ><i class="fab fa-github fa-fw"></i
             ></a>
 
             <!-- Slack -->
-            <a data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm" style="background-color: #481449;" href="#!" role="button"
+            <a data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm" style="background-color: #481449;" href="https://app.slack.com/client/T02QFU9TCTD/D05JL21JNT0" role="button"
             ><i class="fab fa-slack-hash fa-fw"></i
             ></a>
         </div>
@@ -41,8 +41,9 @@
                 <!-- Search, wishlist, cart -->
                 <div class="row text-center">
                     <div class="col-9 bg-custom py-3">
-                        <form action="" class="input-group ">
-                            <input type="search" class="bg-custom text-white flex-grow-1 border-0 align-items-center flex-column"  placeholder="Search all products...">
+                        <form action="search-results.jsp" class="input-group" id="searchForm">
+                            <input type="search" class="bg-custom text-white flex-grow-1 border-0 align-items-center flex-column" id="searchInput" placeholder="Search all products...">
+                            <input type="hidden" name="q" id="searchQuery">
                             <button type="submit" class="bg-custom border-0 d-flex justify-content-center align-items-center flex-column"><i class="fa-solid fa-magnifying-glass text-white "></i></button>
                         </form>
                     </div>
@@ -61,3 +62,20 @@
         <!-- Right element -->
     </div>
 </div>
+
+<script>
+    // Lắng nghe sự kiện submit của form
+    document.getElementById('searchForm').addEventListener('submit', function(event) {
+        // Ngăn chặn hành vi mặc định của form
+        event.preventDefault();
+
+        // Lấy giá trị nhập từ ô tìm kiếm
+        var searchValue = document.getElementById('searchInput').value;
+
+        // Gán giá trị nhập vào input ẩn
+        document.getElementById('searchQuery').value = searchValue;
+
+        // Gửi form
+        this.submit();
+    });
+</script>

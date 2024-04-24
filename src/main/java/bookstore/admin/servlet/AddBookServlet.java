@@ -40,7 +40,7 @@ public class AddBookServlet extends HttpServlet {
         String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
         String fileExtension = fileName.substring(fileName.lastIndexOf("."));
 
-        Book newBook = new Book(name, author, price, category, page, fileName, deepth, height, width);
+        Book newBook = new Book(name, author, price, category, page, fileName, deepth, height, width, 0);
         System.out.println(newBook);
 
         // Save the uploaded file

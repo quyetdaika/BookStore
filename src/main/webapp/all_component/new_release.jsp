@@ -3,7 +3,7 @@
     <div class="container border-top py-4">
         <div class="row align-items-center justify-content-between">
             <div class="col-auto">
-                <h3 class="fw-bold">New Release</h3>
+                <h4 class="fw-bold">New Release</h4>
             </div>
             <div class="col-auto">
                 <a href="collections.jsp?tag=new-release-books">More new release books></a>
@@ -17,7 +17,7 @@
                     String coverSrc = "book/" + book.getFileName();
             %>
                 <div class="col-lg-3 col-md-6 col-12 px-5">
-                    <a href="">
+                    <a href="product-detail.jsp?bookID=<%=book.getId()%>">
                         <div class="card border-0">
                             <img src="<%= URLDecoder.decode(coverSrc, "UTF-8") %>" class="card-img-top img-fluid mx-auto d-block p-4" alt="...">
                             <div class="card-body">

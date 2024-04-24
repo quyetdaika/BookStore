@@ -7,3 +7,22 @@
 
 <%--style.css--%>
 <link rel="stylesheet" href="all_component/style.css">
+
+<script>
+    function sortBooks(select) {
+        var sortBy = select.value;
+        var urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('sort_by', sortBy);
+        window.location.href = window.location.pathname + '?' + urlParams.toString();
+    }
+    function updateCategory(category) {
+        var urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('category', category);
+        window.location.href = window.location.pathname + '?' + urlParams.toString();
+    }
+    function clearCategory() {
+        var urlParams = new URLSearchParams(window.location.search);
+        urlParams.delete('category');
+        window.location.href = window.location.pathname + '?' + urlParams.toString();
+    }
+</script>
