@@ -24,19 +24,24 @@ public class RegisterServlet extends HttpServlet {
             String password = request.getParameter("password");
             String agreeTerms = request.getParameter("agreeTerms");
 
+            HttpSession httpSession = request.getSession();
 
-            System.out.println(name + " " + email + " " + password + " " + agreeTerms);
+            UserDAOImpl userDAO = new UserDAOImpl(DBConnect.getConnection());
+
+            // Kiểm tra xem email đã tồn tại hay chưa
+            if (userDAO.isEmailExist(email)) {
+                httpSession.setAttribute("failedMsg", "Email already exists!");
+                response.sendRedirect("register.jsp");
+                return; // Kết thúc phương thức
+            }
 
             User user = new User();
             user.setName(name);
             user.setEmail(email);
             user.setPassword(password);
 
-            HttpSession httpSession = request.getSession();
-
-            UserDAOImpl userDAO = new UserDAOImpl(DBConnect.getConnection());
             boolean res = userDAO.userRegister(user);
-            if(res) {
+            if (res) {
                 httpSession.setAttribute("successMsg", "User Registration Success");
                 response.sendRedirect("register.jsp");
             } else {
@@ -44,7 +49,7 @@ public class RegisterServlet extends HttpServlet {
                 response.sendRedirect("register.jsp");
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 }

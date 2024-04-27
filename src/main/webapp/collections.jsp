@@ -106,10 +106,11 @@
     }
 %>
 
+<%--breadcrumb--%>
 <div class="container">
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb text-title">
-            <li class="breadcrumb-item"><a href="index.jsp">Home</a></li>
+            <li class="breadcrumb-item"> <a href="index.jsp"> <i class="fa fa-home"></i> Home</a></li>
             <li class="breadcrumb-item active" aria-current="page">Collections</li>
             <%if(categoryParam != null) {%>
             <li class="breadcrumb-item active" aria-current="page"><%=filterTitle%></li>
@@ -117,35 +118,14 @@
         </ol>
     </nav>
 </div>
-
+<%--breadcrumb--%>
 
 <!-- sidebar + content -->
 <section class="border-top">
     <div class="container my-5">
         <div class="row">
             <!-- sidebar -->
-            <div class="col-lg-3">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h4 class="fw-bold">Category</h4>
-                    <button class="btn btn-outline-warning btn-sm" onclick="clearCategory()">Clear</button>
-                </div>
-                <div class="border-top py-2">
-                    <ul class="list-unstyled px-3">
-                        <%for(Map.Entry<String, String> entry : categoryMap.entrySet()) {%>
-                        <li class="my-2">
-                            <a href="javascript:void(0);" class="text-title icon-hover" onclick="updateCategory('<%=entry.getKey()%>')">
-                                <%if(entry.getValue().equals(categoryMap.get(categoryParam))) {%>
-                                <i class="fa-regular fa-circle-dot"></i>
-                                <%} else {%>
-                                <i class="fa-regular fa-circle"></i>
-                                <%}%>
-                                <%=entry.getValue()%>
-                            </a>
-                        </li>
-                        <%}%>
-                    </ul>
-                </div>
-            </div>
+            <%@include file="all_component/sidebar.jsp"%>
             <!-- sidebar -->
             <!-- content -->
             <div class="col-lg-9">

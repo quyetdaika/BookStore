@@ -36,9 +36,16 @@
                                 <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
 
                                 <c:if test="${not empty successMsg}">
-                                    <p class="text-center text-success">${successMsg}</p>
-                                    <a href="login.jsp" class="text-custom fs-6">Sign in ?</a>
+                                    <p class="text-center">
+                                        <span class="text-center text-success">${successMsg}</span>
+                                        <a href="login.jsp" class="text-custom fs-6">Sign in ?</a>
+                                    </p>
                                     <c:remove var="successMsg" scope="session" />
+                                </c:if>
+
+                                <c:if test="${not empty failedMsg}">
+                                    <p class="text-center text-danger">${failedMsg}</p>
+                                    <c:remove var="failedMsg" scope="session" />
                                 </c:if>
 
                                 <form action="register" method="post" class="mx-1 mx-md-4">

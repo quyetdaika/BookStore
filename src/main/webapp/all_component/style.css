@@ -32,7 +32,8 @@ a {
 }
 
 .text-title {
-    color: #585858;
+    color: #212121;
+    font-size: 15px;
 }
 
 .dropdown:hover>.dropdown-menu {
@@ -79,7 +80,8 @@ a {
     box-shadow: none;
 }
 
-.btn-wishlist {
+.btn-add-wishlist,
+.btn-remove-wishlist {
     background-color: rgb(237, 53, 111);
     opacity: 0.9;
     color: rgb(255, 255, 255);
@@ -94,6 +96,10 @@ a {
     cursor: pointer;
 }
 
+.btn-remove-wishlist {
+    opacity: 0.8;
+}
+
 .btn-add-to-cart {
     background-color: #fff;
     border: 2px solid #528ec1;
@@ -102,7 +108,8 @@ a {
     text-align: center;
 }
 
-.btn-wishlist,
+.btn-add-wishlist,
+.btn-remove-wishlist,
 .btn-add-to-cart {
     display: inline-block; /* Sử dụng inline-block để nút không chiếm toàn bộ chiều rộng của container */
     margin-bottom: 10px; /* Thêm margin dưới để tạo khoảng cách giữa hai nút */
@@ -117,4 +124,30 @@ a {
 
 .toast-header {
     border-radius: 8px 8px 0 0;
+}
+
+
+.product-image {
+    height: 300px; /* Đặt chiều cao cố định cho ảnh sản phẩm */
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-image img {
+    max-height: 100%;
+    width: auto;
+}
+
+.hidden {
+    display: none;
+}
+
+.btn-add-to-cart-2 {
+    color: #fff;
+    background-color: #212121;
+    text-align: center;
+    font-size: 14px;
+    padding: 5px;
 }

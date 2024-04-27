@@ -15,5 +15,5 @@ public interface BookDAO {
     public List<Book> getBookByName(String name);
     public List<Book> getBestSellerBooks();
     public List<Book> getBookByKeyword(String keyword);
-    public Book getBookByID(String bookID);
+    public Book getBookByID(int bookID);
 }

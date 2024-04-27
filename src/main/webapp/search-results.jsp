@@ -115,7 +115,7 @@
 <div class="container">
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb text-title">
-            <li class="breadcrumb-item"><a href="index.jsp">Home</a></li>
+            <li class="breadcrumb-item"> <a href="index.jsp"> <i class="fa fa-home"></i> Home</a></li>
             <li class="breadcrumb-item active" aria-current="page">Collections</li>
             <%if(categoryParam != null) {%>
             <li class="breadcrumb-item active" aria-current="page"><%=filterTitle%></li>

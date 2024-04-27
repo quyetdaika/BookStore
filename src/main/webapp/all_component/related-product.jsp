@@ -14,31 +14,31 @@
                     if(i >= 4) break;
                     String coverSrc = "book/" + book.getFileName();
             %>
-            <div class="col-lg-3 col-md-6 col-12 px-5">
-                <a href="product-detail.jsp?bookID=<%=book.getId()%>">
-                    <div class="card border-0 h-100">
-                        <div class="product-image">
-                            <img src="<%= URLDecoder.decode(coverSrc, "UTF-8") %>" class="card-img-top img-fluid mx-auto d-block p-4" alt="...">
-                        </div>
-                        <div class="card-body d-flex flex-column">
-                            <div class="mb-3">
-                                <p class="text-title mb-0"><%=book.getName()%></p>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <p class="fw-bold fs-4 mb-0">$<%=book.getPrice()%></p>
-                                <div class="col-auto">
-                                    <i class="fa-regular fa-heart fa-beat-fade fa-xl" style="color: #ff0505;" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to Wishlist"></i>
+                    <div class="col-lg-3 col-md-6 col-12 px-5">
+                        <a href="product-detail.jsp?bookID=<%=book.getId()%>">
+                            <div class="card border-0 h-100">
+                                <div class="product-image">
+                                    <img src="<%= URLDecoder.decode(coverSrc, "UTF-8") %>" class="card-img-top img-fluid mx-auto d-block p-4" alt="...">
+                                </div>
+                                <div class="card-body d-flex flex-column">
+                                    <div class="mb-3">
+                                        <p class="text-title mb-0"><%=book.getName()%></p>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <p class="fw-bold fs-4 mb-0" style="color: #212121">$<%=book.getPrice()%></p>
+                                        <div class="col-auto">
+                                            <i class="fa-regular fa-heart fa-beat-fade fa-xl" style="color: #ff0505;" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to Wishlist"></i>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center mt-auto">
+                                        <a href="#" class="btn-add-to-cart-2 flex-grow-1 fw-bold">
+                                            </i>ADD TO CART
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="d-flex align-items-center mt-auto">
-                                <a href="#" class="btn-add-to-cart flex-grow-1">
-                                    <i class="fa-solid fa-cart-plus me-2"></i>ADD TO CART
-                                </a>
-                            </div>
-                        </div>
+                        </a>
                     </div>
-                </a>
-            </div>
             <%
                     i++;
                 }
@@ -46,18 +46,3 @@
         </div>
     </div>
 </section>
-
-<style>
-    .product-image {
-        height: 300px; /* Đặt chiều cao cố định cho ảnh sản phẩm */
-        overflow: hidden;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .product-image img {
-        max-height: 100%;
-        width: auto;
-    }
-</style>
