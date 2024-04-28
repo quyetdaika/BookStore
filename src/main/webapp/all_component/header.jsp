@@ -1,14 +1,19 @@
 <%@ page import="bookstore.entity.User" %>
 <%@ page import="bookstore.DB.DBConnect" %>
 <%@ page import="bookstore.DAO.WishlistDAOIplm" %>
+<%@ page import="bookstore.DAO.CartDAOIplm" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page isELIgnored="false" %>
 
 <%
     User user = (User)session.getAttribute("userObj");
     WishlistDAOIplm wishlistDAO = new WishlistDAOIplm(DBConnect.getConnection());
-    int wishlistQty = 0;
-    if(user != null) wishlistQty = wishlistDAO.getBookIDs(user.getId()).size();
+    CartDAOIplm cartDAO = new CartDAOIplm(DBConnect.getConnection());
+    int wishlistQty = 0, cartQty = 0;
+    if(user != null) {
+        wishlistQty = wishlistDAO.getBookIDs(user.getId()).size();
+        cartQty = cartDAO.getSumQuantity(user.getId());
+    }
 %>
 
 <div class="container">
@@ -74,9 +79,10 @@
                         <i class="fa-regular fa-heart fa-xl"></i>
                         <span id="wishlistQty" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"><%=wishlistQty != 0 ? wishlistQty : ""%></span>
                     </a>
-                    <a href="" class="col text-white bg-custom d-flex justify-content-center align-items-center flex-row">
-                        <i class="fa-solid fa-cart-shopping me-2"></i>
+                    <a href="cart.jsp" class="col text-white bg-custom d-flex justify-content-center align-items-center flex-row position-relative">
+                        <i class="fa-brands fa-opencart mx-2"></i>
                         CART
+                        <span id="cartQty" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"><%=cartQty != 0 ? cartQty : ""%></span>
                     </a>
                 </div>
                 <!-- Search, wishlist, cart -->

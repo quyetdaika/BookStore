@@ -85,6 +85,7 @@
     toast.show();
     <c:remove var="successMsg" scope="session"></c:remove>
     </c:if>
+
 </script>
 
 </body>

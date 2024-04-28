@@ -46,3 +46,56 @@
         </div>
     </div>
 </section>
+
+<script>
+    // Thêm sự kiện click cho tất cả các nút ".btn-add-cart-2" bằng Event Delegation
+    const addToCartBtns = document.querySelectorAll('.btn-add-to-cart-2');
+    // Add click event listener to each button
+    addToCartBtns.forEach(btn => {
+        btn.addEventListener('click', function(event) {
+
+            event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+
+            // Kiểm tra trạng thái đăng nhập
+            <% if (user == null) { %>
+            // Hiển thị toast nếu chưa đăng nhập
+            var toast = new bootstrap.Toast(loginToAddCartToast);
+            toast.show();
+            <% } else { %>
+            // Lấy số lượng sản phẩm từ input
+            var quantity = parseInt(document.getElementById('quantityInput').value);
+
+            // Get the book ID from the card's URL or data attribute
+            const bookId = this.closest('.card').querySelector('a').href.split('bookID=')[1];
+
+            // Gọi Servlet để thêm sản phẩm vào giỏ hàng
+            fetch('AddToCartServlet', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'bookId=' + encodeURIComponent(bookId) + '&quantity=' + encodeURIComponent(quantity)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Lấy số lượng hiện tại từ phản hồi của servlet
+                        response.text().then(function(data) {
+                            // Cập nhật số lượng hiển thị trong giao diện người dùng
+                            updateCartQty(data);
+
+                            // Hiển thị toast thông báo thành công
+                            var toast = new bootstrap.Toast(addToCartSuccessToast);
+                            toast.show();
+                        });
+
+                    } else {
+                        console.error('Failed to add book to cart');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            <% } %>
+        });
+    });
+</script>

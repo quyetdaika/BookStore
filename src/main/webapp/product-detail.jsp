@@ -94,7 +94,7 @@
                                 <button class="btn btn-white border border-secondary" type="button" id="decreaseButton" data-mdb-ripple-color="dark">
                                     <i class="fas fa-minus"></i>
                                 </button>
-                                <input type="text" id="quantityInput" class="form-control text-center border border-secondary" placeholder="1" aria-label="Example text with button addon" aria-describedby="button-addon1" />
+                                <input type="number" id="quantityInput" class="form-control text-center border border-secondary" value="1" aria-describedby="button-addon1" />
                                 <button class="btn btn-white border border-secondary" type="button" id="increaseButton" data-mdb-ripple-color="dark">
                                     <i class="fas fa-plus"></i>
                                 </button>
@@ -103,7 +103,7 @@
                     </div>
 
                     <div class="my-2">
-                        <a href="#" class="btn-add-to-cart">
+                        <a href="#" class="btn-add-to-cart" id="btn-add-cart">
                             <i class="fa-brands fa-opencart mx-2"></i>ADD TO CART
                         </a>
                     </div>
@@ -203,64 +203,30 @@
 <%@include file="all_component/footer.jsp"%>
 <!-- Footer -->
 
-<!-- Toast thông báo đăng nhập để thêm vào wishlist-->
-<div aria-live="polite" aria-atomic="true" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-    <div id="loginToAddWishlistToast" class="toast" role="alert" style="background-color: #EF497D">
-        <div class="toast-body">
-            <div class="d-flex gap-4" style="color: white">
-                <span><i class="fa-regular fa-user fs-6"></i></span>
-                <div class="d-flex flex-grow-1 align-items-center">
-                    <span class="fw-semibold">Please login to save your wishlist across devices.</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Toast thông báo thêm vào wishlist thành công-->
-<div aria-live="polite" aria-atomic="true" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-    <div id="addToWishlistSuccessToast" class="toast" role="alert" style="background-color: #EF497D">
-        <div class="toast-body">
-            <div class="d-flex gap-4" style="color: white">
-                <span><i class="fa-regular fa-heart mx-2"></i></span>
-                <div class="d-flex flex-grow-1 align-items-center">
-                    <span class="fw-semibold">Add to Wishlist success</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Toast thông báo xóa khỏi wishlist thành công-->
-<div aria-live="polite" aria-atomic="true" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-    <div id="removeFromWishlistSuccessToast" class="toast" role="alert" style="background-color: #EF497D">
-        <div class="toast-body">
-            <div class="d-flex gap-4" style="color: white">
-                <span><i class="fa-regular fa-heart mx-2"></i></span>
-                <div class="d-flex flex-grow-1 align-items-center">
-                    <span class="fw-semibold">Remove from Wishlist success</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<!-- Toast -->
+<%@include file="all_component/toast.jsp"%>
+<!-- Toast -->
 
 <%--Xử lý tăng giảm quantity--%>
 <script>
     // Lấy tham chiếu đến các phần tử DOM
-    var decreaseButton = document.getElementById("decreaseButton");
-    var increaseButton = document.getElementById("increaseButton");
-    var quantityInput = document.getElementById("quantityInput");
+    const decreaseButton = document.getElementById("decreaseButton");
+    const increaseButton = document.getElementById("increaseButton");
+    const quantityInput = document.getElementById("quantityInput");
 
     // Thêm sự kiện click cho nút giảm số lượng
     decreaseButton.addEventListener("click", function() {
-        var currentValue = parseInt(quantityInput.value);
-        if (!isNaN(currentValue) && currentValue > 0) {
+        const currentValue = parseInt(quantityInput.value);
+        if (!isNaN(currentValue) && currentValue > 1) {
             quantityInput.value = currentValue - 1;
+        } else {
+            quantityInput.value = 1; // Đặt giá trị tối thiểu là 1 nếu giá trị hiện tại là 1 hoặc không hợp lệ
         }
     });
 
     // Thêm sự kiện click cho nút tăng số lượng
     increaseButton.addEventListener("click", function() {
-        var currentValue = parseInt(quantityInput.value);
+        const currentValue = parseInt(quantityInput.value);
         if (!isNaN(currentValue)) {
             quantityInput.value = currentValue + 1;
         } else {
@@ -269,18 +235,19 @@
     });
 </script>
 
+
 <%--Xử lý thêm / xóa wishlist--%>
 <script>
     // Lấy tham chiếu đến toast
-    var loginToAddWishlistToast = document.getElementById('loginToAddWishlistToast');
-    var addToWishlistSuccessToast = document.getElementById('addToWishlistSuccessToast');
-    var removeFromWishlistSuccessToast = document.getElementById('removeFromWishlistSuccessToast');
-    var wishlistQtySpan = document.getElementById('wishlistQty');
+    const loginToAddWishlistToast = document.getElementById('loginToAddWishlistToast');
+    const addToWishlistSuccessToast = document.getElementById('addToWishlistSuccessToast');
+    const removeFromWishlistSuccessToast = document.getElementById('removeFromWishlistSuccessToast');
+    const wishlistQtySpan = document.getElementById('wishlistQty');
 
     // Thêm sự kiện click cho nút "Add to Wishlist"
     // Lấy tham chiếu đến các phần tử DOM
-    var btnAddWishlist = document.getElementById('btn-add-wishlist');
-    var btnRemoveWishlist = document.getElementById('btn-remove-wishlist');
+    const btnAddWishlist = document.getElementById('btn-add-wishlist');
+    const btnRemoveWishlist = document.getElementById('btn-remove-wishlist');
 
     // Thêm sự kiện click cho nút "Add to Wishlist"
     btnAddWishlist.addEventListener('click', function(event) {
@@ -289,7 +256,7 @@
         // Kiểm tra trạng thái đăng nhập
         <% if (user == null) { %>
         // Hiển thị toast nếu chưa đăng nhập
-        var toast = new bootstrap.Toast(loginToAddWishlistToast);
+        const toast = new bootstrap.Toast(loginToAddWishlistToast);
         toast.show();
         <% } else { %>
         // Gọi Servlet để thêm sản phẩm vào Wishlist
@@ -307,7 +274,7 @@
                         // Cập nhật số lượng hiển thị trong giao diện người dùng
                         updateWishlistQty(data);
                         // Hiển thị toast thông báo thành công
-                        var toast = new bootstrap.Toast(addToWishlistSuccessToast);
+                        const toast = new bootstrap.Toast(addToWishlistSuccessToast);
                         toast.show();
                         // Ẩn nút "Add to Wishlist" và hiển thị nút "Remove from Wishlist"
                         btnAddWishlist.classList.add('hidden');
@@ -344,7 +311,7 @@
                         // Cập nhật số lượng hiển thị trong giao diện người dùng
                         updateWishlistQty(data);
                         // Hiển thị toast thông báo thành công
-                        var toast = new bootstrap.Toast(removeFromWishlistSuccessToast);
+                        const toast = new bootstrap.Toast(removeFromWishlistSuccessToast);
                         toast.show();
                         btnAddWishlist.classList.remove('hidden');
                         btnRemoveWishlist.classList.add('hidden');
@@ -363,11 +330,81 @@
     function updateWishlistQty(qty) {
         wishlistQtySpan.innerText = qty;
         if (qty === '0') {
-            wishlistQtySpan.style.display = 'none';
+            wishlistQtySpan.style.visibility = 'hidden';
         } else {
-            wishlistQtySpan.style.display = 'inline';
+            wishlistQtySpan.style.visibility = 'visible';
         }
     }
 </script>
+
+<%--Xử lý thêm vào giỏ hàng--%>
+<script>
+    // Lấy tham chiếu đến nút "Add to Cart"
+    const btnAddToCart = document.getElementById('btn-add-cart');
+    const addToCartSuccessToast = document.getElementById('addToCartSuccessToast');
+    const loginToAddCartToast = document.getElementById('loginToAddCartToast');
+    const cartQtySpan = document.getElementById('cartQty');
+
+    // Thêm sự kiện click cho nút "Add to Cart"
+    btnAddToCart.addEventListener('click', function(event) {
+        handleAddToCart(event);
+    });
+
+</script>
+
+<script>
+    function handleAddToCart(event) {
+        event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+
+        // Kiểm tra trạng thái đăng nhập
+        <% if (user == null) { %>
+        // Hiển thị toast nếu chưa đăng nhập
+        const toast = new bootstrap.Toast(loginToAddCartToast);
+        toast.show();
+        <% } else { %>
+        // Lấy số lượng sản phẩm từ input
+        const quantity = parseInt(document.getElementById('quantityInput').value);
+
+        // Gọi Servlet để thêm sản phẩm vào giỏ hàng
+        fetch('AddToCartServlet', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: 'bookId=<%= currentBook.getId() %>&quantity=' + encodeURIComponent(quantity)
+        })
+            .then(response => {
+                if (response.ok) {
+                    // Lấy số lượng hiện tại từ phản hồi của servlet
+                    response.text().then(function(data) {
+                        // Cập nhật số lượng hiển thị trong giao diện người dùng
+                        updateCartQty(data);
+
+                        // Hiển thị toast thông báo thành công
+                        const toast = new bootstrap.Toast(addToCartSuccessToast);
+                        toast.show();
+                    });
+
+                } else {
+                    console.error('Failed to add book to cart');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        <% } %>
+    }
+
+    // Hàm cập nhật số lượng sản phẩm trong cart và hiển thị/ẩn span
+    function updateCartQty(qty) {
+        cartQtySpan.innerText = qty;
+        if (qty === '0') {
+            cartQtySpan.style.visibility = 'hidden';
+        } else {
+            cartQtySpan.style.visibility = 'visible';
+        }
+    }
+</script>
+<%-- Xử lý thêm vào giỏ hàng --%>
 </body>
 </html>

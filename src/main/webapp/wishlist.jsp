@@ -55,7 +55,7 @@
                      </span>
                  </div>
              <%} else {%>
-             <div id="noItemsDiv" class="py-5" style="display: <%= wishlistBooks.isEmpty() ? "block" : "none" %>;">
+                <div id="noItemsDiv" class="py-5" style="display: <%= wishlistBooks.isEmpty() ? "block" : "none" %>;">
                     <span class="fs-4">
                         <i class="fa-solid fa-xmark"></i>
                         <span>There are no items in this wishlist</span>
@@ -64,6 +64,7 @@
                  </div>
              <%}%>
          <%} else {%>
+
              <div class="container">
                  <div class="row">
                      <%--Product list--%>
@@ -85,7 +86,7 @@
                                          <p class="fw-bold fs-4 mb-0">$<%=book.getPrice()%></p>
                                      </div>
                                      <div class="d-flex align-items-center mt-auto">
-                                         <a href="#" class="btn-add-wishlist flex-grow-1 fw-bold">
+                                         <a href="#" id="btn-add-to-cart" class="btn-add-wishlist flex-grow-1 fw-bold">
                                              ADD TO CART
                                          </a>
                                          <button id="btn-remove-wishlist" class="btn" style="transition: color 0.3s;" onmouseover="this.querySelector('i.fa-trash-can').style.color = 'red';" onmouseout="this.querySelector('i.fa-trash-can').style.color = 'black';">
@@ -102,6 +103,14 @@
                  </div>
              </div>
              <%--Product list--%>
+
+             <div id="noItemsDiv" class="py-5" style="visibility: hidden">
+                    <span class="fs-4">
+                        <i class="fa-solid fa-xmark"></i>
+                        <span>There are no items in this wishlist</span>
+                        <a href="collections.jsp"><button class="btn btn-add-wishlist">Explore our collections</button></a>
+                    </span>
+             </div>
          <%}%>
 
      </div>
@@ -112,19 +121,9 @@
 <%@include file="all_component/footer.jsp"%>
 <!-- Footer -->
 
-<!-- Toast thông báo xóa khỏi wishlist thành công-->
-<div aria-live="polite" aria-atomic="true" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-    <div id="removeFromWishlistSuccessToast" class="toast" role="alert" style="background-color: #EF497D">
-        <div class="toast-body">
-            <div class="d-flex gap-4" style="color: white">
-                <span><i class="fa-regular fa-heart mx-2"></i></span>
-                <div class="d-flex flex-grow-1 align-items-center">
-                    <span class="fw-semibold">Remove from Wishlist success</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<!-- Toast -->
+<%@include file="all_component/toast.jsp"%>
+<!-- Toast -->
 
 <script>
     // Get all the remove wishlist buttons
@@ -134,56 +133,141 @@
 
     // Add click event listener to each button
     removeWishlistBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            // Get the book ID from the card's URL or data attribute
-            const bookId = this.closest('.card').querySelector('a').href.split('bookID=')[1];
-
-            // Send the AJAX request to remove the book from the wishlist
-            fetch('RemoveFromWishlistServlet', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: 'bookId=' + encodeURIComponent(bookId)
-            })
-                .then(response => {
-                    if (response.ok) {
-                        // Remove the book card from the UI
-                        this.closest('.col-lg-3').remove();
-
-                        // Update the wishlist quantity
-                        response.text().then(function(data) {
-                            updateWishlistQty(data);
-
-                            // Show or hide the "No items" div based on the wishlist status
-                            if (data === '0') {
-                                noItemsDiv.style.display = 'block';
-                            } else {
-                                noItemsDiv.style.display = 'none';
-                            }
-                        });
-
-                        // Show the success toast
-                        const removeFromWishlistSuccessToast = document.getElementById('removeFromWishlistSuccessToast');
-                        const toast = new bootstrap.Toast(removeFromWishlistSuccessToast);
-                        toast.show();
-                    } else {
-                        console.error('Failed to remove book from wishlist');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
+        btn.addEventListener('click', () => {
+            removeBookFromWishlist.call(btn);
         });
     });
+
+</script>
+
+<!-- Handle add to card btn -->
+<script>
+    const addToCartSuccessToast = document.getElementById('addToCartSuccessToast');
+    const loginToAddCartToast = document.getElementById('loginToAddCartToast');
+    const cartQtySpan = document.getElementById('cartQty');
+    const addToCartBtns = document.querySelectorAll('#btn-add-to-cart');
+
+    // Thêm sự kiện click cho tất cả các nút ".btn-add-cart-2" bằng Event Delegation
+
+    // Add click event listener to each button
+    addToCartBtns.forEach(btn => {
+        // Remove from wishlist
+        btn.addEventListener('click', () => {
+            removeBookFromWishlist.call(btn);
+        });
+
+        // Add to cart
+        btn.addEventListener('click', () => {
+            addToCart.call(btn);
+        });
+    });
+</script>
+
+<script>
+    function removeBookFromWishlist(){
+        // Get the book ID from the card's URL or data attribute
+        const bookId = this.closest('.card').querySelector('a').href.split('bookID=')[1];
+
+        // Send the AJAX request to remove the book from the wishlist
+        fetch('RemoveFromWishlistServlet', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: 'bookId=' + encodeURIComponent(bookId)
+        })
+            .then(response => {
+                if (response.ok) {
+                    // Remove the book card from the UI
+                    this.closest('.col-lg-3').remove();
+
+                    // Update the wishlist quantity
+                    response.text().then(function(data) {
+                        updateWishlistQty(data);
+
+                        // Show or hide the "No items" div based on the wishlist status
+                        if (data === '0') {
+                            noItemsDiv.style.visibility = 'visible';
+                        } else {
+                            noItemsDiv.style.visibility = 'hidden';
+                        }
+                    });
+
+                    // Show the success toast
+                    const removeFromWishlistSuccessToast = document.getElementById('removeFromWishlistSuccessToast');
+                    const toast = new bootstrap.Toast(removeFromWishlistSuccessToast);
+                    toast.show();
+                } else {
+                    console.error('Failed to remove book from wishlist');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    function addToCart(){
+        // Lấy số lượng sản phẩm từ input
+        const quantity = 1;
+
+        // Get the book ID from the card's URL or data attribute
+        const bookId = this.closest('.card').querySelector('a').href.split('bookID=')[1];
+
+        // Gọi Servlet để thêm sản phẩm vào giỏ hàng
+        fetch('AddToCartServlet', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: 'bookId=' + encodeURIComponent(bookId) + '&quantity=' + encodeURIComponent(quantity)
+        })
+            .then(response => {
+                if (response.ok) {
+                    // Remove the book card from the UI
+                    this.closest('.col-lg-3').remove();
+
+                    // Lấy số lượng hiện tại từ phản hồi của servlet
+                    response.text().then(function(data) {
+                        // Cập nhật số lượng hiển thị trong giao diện người dùng
+                        updateCartQty(data);
+
+                        // Show or hide the "No items" div based on the wishlist status
+                        // Check if wishlist is empty after removing the item
+                        if (wishlistQtySpan.innerText === '0') {
+                            noItemsDiv.style.visibility = 'visible';
+                        }
+
+                        // Hiển thị toast thông báo thành công
+                        var toast = new bootstrap.Toast(addToCartSuccessToast);
+                        toast.show();
+                    });
+
+                } else {
+                    console.error('Failed to add book to cart');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
 
     // Hàm cập nhật số lượng sản phẩm trong Wishlist và hiển thị/ẩn span
     function updateWishlistQty(qty) {
         wishlistQtySpan.innerText = qty;
         if (qty === '0') {
-            wishlistQtySpan.style.display = 'none';
+            wishlistQtySpan.style.visibility = 'hidden';
         } else {
-            wishlistQtySpan.style.display = 'inline';
+            wishlistQtySpan.style.visibility = 'visible';
+        }
+    }
+
+    // Hàm cập nhật số lượng sản phẩm trong cart và hiển thị/ẩn span
+    function updateCartQty(qty) {
+        cartQtySpan.innerText = qty;
+        if (qty === '0') {
+            cartQtySpan.style.visibility = 'hidden';
+        } else {
+            cartQtySpan.style.visibility = 'visible';
         }
     }
 </script>

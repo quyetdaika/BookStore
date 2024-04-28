@@ -2,15 +2,15 @@ package bookstore.user.servlet;
 
 import java.io.*;
 
-import bookstore.DAO.WishlistDAOIplm;
+import bookstore.DAO.CartDAOIplm;
 import bookstore.DB.DBConnect;
 import bookstore.entity.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
-@WebServlet("/RemoveFromWishlistServlet")
-public class RemoveFromWishlistServlet extends HttpServlet {
+@WebServlet("/AddToCartServlet")
+public class AddToCartServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
@@ -25,17 +25,23 @@ public class RemoveFromWishlistServlet extends HttpServlet {
                 return;
             }
 
-            // Lấy bookId từ yêu cầu
+            // Lấy bookId và quantity từ yêu cầu
             int bookId = Integer.parseInt(request.getParameter("bookId"));
+            int quantity = Integer.parseInt(request.getParameter("quantity"));
 
-            // Xóa sản phẩm khỏi Wishlist
-            WishlistDAOIplm wishlistDAO = new WishlistDAOIplm(DBConnect.getConnection());
-            wishlistDAO.removeBookFromWishlist(user.getId(), bookId);
+            // Thêm sản phẩm vào giỏ hàng
+            CartDAOIplm cartDAO = new CartDAOIplm(DBConnect.getConnection());
+            boolean success = cartDAO.addBookToCart(user.getId(), bookId, quantity);
 
-            // Trả về phản hồi thành công
-            int wishlistCount = wishlistDAO.getBookIDs(user.getId()).size();
-            response.getWriter().write(String.valueOf(wishlistCount));
-            response.setStatus(HttpServletResponse.SC_OK);
+            // Trả về phản hồi thành công hoặc lỗi
+            if (success) {
+                int cartQty = cartDAO.getSumQuantity(user.getId());
+                response.getWriter().write(String.valueOf(cartQty));
+
+                response.setStatus(HttpServletResponse.SC_OK);
+            } else {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             // Trả về mã lỗi nếu có lỗi xảy ra
