@@ -1,5 +1,7 @@
 <%@ page import="java.sql.Connection" %> <%@ page import="bookstore.DB.DBConnect" %> <%@ page import="bookstore.DAO.BookDAOIplm" %> <%@ page import="bookstore.entity.Book" %> <%@ page import="java.net.URLDecoder" %> <%@ page
-        import="bookstore.DAO.BookDAO" %> <%@ page import="java.util.*" %> <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+        import="bookstore.DAO.BookDAO" %> <%@ page import="java.util.*" %>
+<%@ page import="java.util.stream.Collectors" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -45,6 +47,7 @@
          </div>
          <%--Title--%>
 
+
          <%if(wishlistBooks.isEmpty()){%>
              <%if(user == null){%>
                  <div class="py-5">
@@ -64,6 +67,12 @@
                  </div>
              <%}%>
          <%} else {%>
+             <div class="container my-2">
+                 <span style="color: #EF497D" class="text-uppercase fw-bold">
+                     <span id="btn-add-all-to-cart" class="p-2 btn-no-bg">add all to cart</span>
+                     <span id="btn-remove-all-from-wishlist" class="p-2 btn-no-bg">remove all from wishlist</span>
+                 </span>
+             </div>
 
              <div class="container">
                  <div class="row">
@@ -111,7 +120,9 @@
                         <a href="collections.jsp"><button class="btn btn-add-wishlist">Explore our collections</button></a>
                     </span>
              </div>
-         <%}%>
+         <%}
+             assert user != null;
+         %>
 
      </div>
  </section>
@@ -125,20 +136,6 @@
 <%@include file="all_component/toast.jsp"%>
 <!-- Toast -->
 
-<script>
-    // Get all the remove wishlist buttons
-    const removeWishlistBtns = document.querySelectorAll('#btn-remove-wishlist');
-    const wishlistQtySpan = document.getElementById('wishlistQty');
-    const noItemsDiv = document.getElementById('noItemsDiv');
-
-    // Add click event listener to each button
-    removeWishlistBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            removeBookFromWishlist.call(btn);
-        });
-    });
-
-</script>
 
 <!-- Handle add to card btn -->
 <script>
@@ -157,13 +154,97 @@
         });
 
         // Add to cart
-        btn.addEventListener('click', () => {
-            addToCart.call(btn);
+        btn.addEventListener('click', (event) => {
+            addToCart.call(btn, event);
         });
     });
 </script>
 
+<%--Handle remove book from wishlist btn--%>
 <script>
+    // Get all the remove wishlist buttons
+    const removeWishlistBtns = document.querySelectorAll('#btn-remove-wishlist');
+    const wishlistQtySpan = document.getElementById('wishlistQty');
+    const noItemsDiv = document.getElementById('noItemsDiv');
+
+    // Add click event listener to each button
+    removeWishlistBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            removeBookFromWishlist.call(btn);
+        });
+    });
+
+</script>
+
+<%--Handle add all to cart--%>
+<script>
+    const addAllToCartBtn = document.getElementById('btn-add-all-to-cart');
+
+    addAllToCartBtn.addEventListener('click', () => {
+        addAllToCart();
+    });
+</script>
+
+<%--Handle remove all from wishlist--%>
+<script>
+    const removeAllFromWishlistBtn = document.getElementById('btn-remove-all-from-wishlist');
+
+    removeAllFromWishlistBtn.addEventListener('click', () => {
+        removeAllFromWishlist();
+    });
+</script>
+
+
+<%--All Function--%>
+<script>
+    function addToCart(event){
+        event.preventDefault(); // Prevent the default behavior
+
+        const quantity = 1;
+
+        // Get the book ID from the card's URL or data attribute
+        const bookId = this.closest('.card').querySelector('a').href.split('bookID=')[1];
+
+        // Gọi Servlet để thêm sản phẩm vào giỏ hàng
+        fetch('AddToCartServlet', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: 'bookId=' + encodeURIComponent(bookId) + '&quantity=' + encodeURIComponent(quantity)
+        })
+            .then(response => {
+                if (response.ok) {
+                    // Remove the book card from the UI
+                    this.closest('.col-lg-3').remove();
+
+                    // Lấy số lượng hiện tại từ phản hồi của servlet
+                    response.text().then(function(cartQty) {
+                        // Cập nhật số lượng hiển thị trong giao diện người dùng
+                        updateCartQty(cartQty);
+
+                        console.log(wishlistQtySpan.innerText);
+
+                        // Update the wishlist quantity
+                        updateWishlistQty(wishlistQtySpan.innerText ? wishlistQtySpan.innerText : '0');
+
+                        // Show or hide the "No items" div based on the wishlist status
+                        setButtonVisibility(wishlistQtySpan.innerText ? wishlistQtySpan.innerText : '0');
+
+                        // Hiển thị toast thông báo thành công
+                        var toast = new bootstrap.Toast(addToCartSuccessToast);
+                        toast.show();
+                    });
+
+                } else {
+                    console.error('Failed to add book to cart');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
     function removeBookFromWishlist(){
         // Get the book ID from the card's URL or data attribute
         const bookId = this.closest('.card').querySelector('a').href.split('bookID=')[1];
@@ -186,11 +267,7 @@
                         updateWishlistQty(data);
 
                         // Show or hide the "No items" div based on the wishlist status
-                        if (data === '0') {
-                            noItemsDiv.style.visibility = 'visible';
-                        } else {
-                            noItemsDiv.style.visibility = 'hidden';
-                        }
+                        setButtonVisibility(data);
                     });
 
                     // Show the success toast
@@ -206,49 +283,91 @@
             });
     }
 
-    function addToCart(){
-        // Lấy số lượng sản phẩm từ input
-        const quantity = 1;
+    function addAllToCart() {
+        <%if(user != null){%>
+        const bookCards = document.querySelectorAll('.col-lg-3');
 
-        // Get the book ID from the card's URL or data attribute
-        const bookId = this.closest('.card').querySelector('a').href.split('bookID=')[1];
+        // Get all the book IDs from the wishlist
+        <%
+            List<Integer> bookIDs = wishlistDAO.getBookIDs(user.getId());
+            String bookIDsString = String.join(",", bookIDs.stream().map(Object::toString).collect(Collectors.toList()));
+        %>
 
-        // Gọi Servlet để thêm sản phẩm vào giỏ hàng
-        fetch('AddToCartServlet', {
+
+        // Send the AJAX request to add all books to the cart
+        fetch('AddAllToCartServlet', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
-            body: 'bookId=' + encodeURIComponent(bookId) + '&quantity=' + encodeURIComponent(quantity)
+            body: 'userId=<%= user.getId() %>&bookIds=<%= bookIDsString %>'
         })
             .then(response => {
                 if (response.ok) {
-                    // Remove the book card from the UI
-                    this.closest('.col-lg-3').remove();
+                    // Remove all book cards from the UI
+                    const bookCards = document.querySelectorAll('.col-lg-3');
+                    bookCards.forEach(card => card.remove());
 
-                    // Lấy số lượng hiện tại từ phản hồi của servlet
+                    // Update the cart quantity
                     response.text().then(function(data) {
-                        // Cập nhật số lượng hiển thị trong giao diện người dùng
                         updateCartQty(data);
-
-                        // Show or hide the "No items" div based on the wishlist status
-                        // Check if wishlist is empty after removing the item
-                        if (wishlistQtySpan.innerText === '0') {
-                            noItemsDiv.style.visibility = 'visible';
-                        }
-
-                        // Hiển thị toast thông báo thành công
-                        var toast = new bootstrap.Toast(addToCartSuccessToast);
-                        toast.show();
                     });
 
+                    // Update the wishlist quantity
+                    updateWishlistQty('0');
+
+                    // Show the "No items" div
+                    setButtonVisibility('0');
+
+                    // Show the success toast
+                    const addAllToCartSuccessToast = document.getElementById('addAllToCartSuccessToast');
+                    const toast = new bootstrap.Toast(addAllToCartSuccessToast);
+                    toast.show();
                 } else {
-                    console.error('Failed to add book to cart');
+                    console.error('Failed to add all books to cart');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
             });
+        <%}%>
+    }
+
+    // Hàm xóa tất cả book khỏi wishlist
+    function removeAllFromWishlist() {
+        <%if(user != null){%>
+            // Send the AJAX request to remove all books from the wishlist
+            fetch('RemoveAllFromWishlistServlet', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'userId=<%= user.getId() %>'
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Remove all book cards from the UI
+                        const bookCards = document.querySelectorAll('.col-lg-3');
+                        bookCards.forEach(card => card.remove());
+
+                        // Update the wishlist quantity
+                        updateWishlistQty('0');
+
+                        // Show the "No items" div
+                        setButtonVisibility('0');
+
+                        // Show the success toast
+                        const removeAllFromWishlistSuccessToast = document.getElementById('removeAllFromWishlistSuccessToast');
+                        const toast = new bootstrap.Toast(removeAllFromWishlistSuccessToast);
+                        toast.show();
+                    } else {
+                        console.error('Failed to remove all books from wishlist');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        <%}%>
     }
 
     // Hàm cập nhật số lượng sản phẩm trong Wishlist và hiển thị/ẩn span
@@ -268,6 +387,19 @@
             cartQtySpan.style.visibility = 'hidden';
         } else {
             cartQtySpan.style.visibility = 'visible';
+        }
+    }
+
+    // Hàm ẩn / hiện các nút và span
+    function setButtonVisibility(wishlistQty){
+        if(wishlistQty === '0'){
+            noItemsDiv.style.visibility = 'visible';
+            removeAllFromWishlistBtn.style.visibility = 'hidden';
+            addAllToCartBtn.style.visibility = 'hidden';
+        } else {
+            noItemsDiv.style.visibility = 'hidden';
+            removeAllFromWishlistBtn.style.visibility = 'visible';
+            addAllToCartBtn.style.visibility = 'visible';
         }
     }
 </script>

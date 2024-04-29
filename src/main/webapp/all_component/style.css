@@ -96,8 +96,17 @@ a {
     cursor: pointer;
 }
 
+.btn-no-bg:hover{
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.04);
+}
+
 .btn-remove-wishlist {
     opacity: 0.8;
+}
+
+.btn-add-wishlist:hover{
+    box-shadow: #333333;
 }
 
 .btn-add-to-cart {

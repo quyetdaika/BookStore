@@ -42,7 +42,7 @@
 <!--Main Navigation-->
 
 <!-- cart + summary -->
-<section class="bg-light my-5">
+<section class="bg-light py-5 border-top">
     <div class="container">
         <div class="row">
             <!-- cart -->

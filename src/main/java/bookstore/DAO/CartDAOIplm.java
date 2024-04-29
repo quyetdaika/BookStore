@@ -55,7 +55,11 @@ public class CartDAOIplm implements CartDAO{
 
     @Override
     public boolean addAllBookToCart(int userID, List<Integer> bookIDs) {
-        return false;
+        boolean f = false;
+        for(int bookID : bookIDs) f = addBookToCart(userID, bookID, 1);
+        if(f) System.out.println("insert all to Cart success");
+        else System.out.println("insert all to Cart failed");
+        return f;
     }
 
     @Override

@@ -1,5 +1,7 @@
 package bookstore.DAO;
 
+import bookstore.entity.Book;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -58,8 +60,21 @@ public class WishlistDAOIplm implements WishlistDAO {
     }
 
     @Override
-    public boolean removeAllBookFromWishlist(int userID, List<Integer> bookIDs) {
-        return false;
+    public boolean removeAllBookFromWishlist(int userID) {
+        boolean f = false;
+        try {
+            String sql = "delete from wishlist where userid = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userID);
+            f = ps.executeUpdate() == 1;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        if(f) System.out.println("delete all from Wishlist success");
+        else System.out.println("delete all from Wishlist failed");
+        return f;
     }
 
     @Override
