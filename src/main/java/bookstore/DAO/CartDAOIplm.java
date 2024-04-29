@@ -1,5 +1,7 @@
 package bookstore.DAO;
 
+import bookstore.DB.DBConnect;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -50,7 +52,21 @@ public class CartDAOIplm implements CartDAO{
 
     @Override
     public boolean removeBookFromCart(int userID, int bookID) {
-        return false;
+        boolean f = false;
+        try {
+            String sql = "delete from cart where userid = ? and bookid = ?;";
+
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userID);
+            ps.setInt(2, bookID);
+
+            f = ps.executeUpdate() == 1;
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        if(f) System.out.println("delete from Cart success");
+        else System.out.println("delete from Cart failed");
+        return f;
     }
 
     @Override
@@ -69,7 +85,21 @@ public class CartDAOIplm implements CartDAO{
 
     @Override
     public List<Integer> getBookIDs(int userID) {
-        return null;
+        List<Integer> bookIDs = new ArrayList<>();
+        try {
+            String sql = "select bookID from cart where userID = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userID);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                bookIDs.add(rs.getInt("bookID"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("bookIDs size : " + bookIDs.size());
+        return bookIDs;
     }
 
     @Override

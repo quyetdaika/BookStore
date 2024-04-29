@@ -62,9 +62,6 @@
             var toast = new bootstrap.Toast(loginToAddCartToast);
             toast.show();
             <% } else { %>
-            // Lấy số lượng sản phẩm từ input
-            var quantity = parseInt(document.getElementById('quantityInput').value);
-
             // Get the book ID from the card's URL or data attribute
             const bookId = this.closest('.card').querySelector('a').href.split('bookID=')[1];
 
@@ -74,7 +71,7 @@
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
-                body: 'bookId=' + encodeURIComponent(bookId) + '&quantity=' + encodeURIComponent(quantity)
+                body: 'bookId=' + encodeURIComponent(bookId) + '&quantity=' + encodeURIComponent('1')
             })
                 .then(response => {
                     if (response.ok) {
