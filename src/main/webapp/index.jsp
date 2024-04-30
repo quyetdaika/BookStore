@@ -3,7 +3,12 @@
 <%@ page import="bookstore.DAO.BookDAOIplm" %>
 <%@ page import="java.util.List" %>
 <%@ page import="bookstore.entity.Book" %>
+<%@ page import="bookstore.entity.User" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page isELIgnored="false" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,6 +18,12 @@
 </head>
 
 <body>
+
+<%
+    BookDAOIplm bookDAO = new BookDAOIplm(DBConnect.getConnection());
+    List<Book> newReleaseBooks = bookDAO.getNewReleaseBooks();
+    List<Book> saleBooks = bookDAO.getSaleBooks();
+%>
 
 <!--Main Navigation-->
 <header>
@@ -30,12 +41,6 @@
 <!-- Carousel -->
 <%@include file="all_component/carousel.jsp"%>
 <!-- Carousel -->
-
-<%
-    BookDAOIplm bookDAO = new BookDAOIplm(DBConnect.getConnection());
-    List<Book> newReleaseBooks = bookDAO.getNewReleaseBooks();
-    List<Book> saleBooks = bookDAO.getSaleBooks();
-%>
 
 <!-- Products -->
 <%@include file="all_component/new_release.jsp"%>
@@ -58,6 +63,30 @@
 <!-- Footer -->
 <%@include file="all_component/footer.jsp"%>
 <!-- Footer -->
+
+<!-- Toast thông báo -->
+<div aria-live="polite" aria-atomic="true" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div id="loginSuccessToast" class="toast text-bg-success" role="alert">
+        <div class="toast-body">
+            <div class="d-flex gap-4">
+                <span><i class="fa-solid fa-circle-check fa-lg"></i></span>
+                <div class="d-flex flex-grow-1 align-items-center">
+                    <span class="fw-semibold">${successMsg}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    <c:if test="${not empty successMsg}">
+    var errorToast = document.getElementById('loginSuccessToast');
+    var toast = new bootstrap.Toast(errorToast);
+    toast.show();
+    <c:remove var="successMsg" scope="session"></c:remove>
+    </c:if>
+
+</script>
 
 </body>
 </html>

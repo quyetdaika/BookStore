@@ -5,6 +5,7 @@ import bookstore.entity.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class UserDAOImpl implements UserDao {
     private Connection connection;
@@ -12,6 +13,19 @@ public class UserDAOImpl implements UserDao {
     public UserDAOImpl(Connection connection) {
         super();
         this.connection = connection;
+    }
+
+    public boolean isEmailExist(String email) {
+        try {
+            String sql = "SELECT * FROM `user` WHERE `email` = ?";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next(); // Nếu có kết quả trả về, nghĩa là email đã tồn tại
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @Override

@@ -166,8 +166,35 @@ public class BookDAOIplm implements BookDAO {
     }
 
     @Override
-    public Book getBookByID(String bookID) {
-        String sql = "select * from book where id = ?";
-        return getBooksWithParameterIndex(sql, bookID).get(0);
+    public Book getBookByID(int bookID) {
+        List<Book> allBooks = new ArrayList<>();
+        Book book = null;
+
+        try {
+            String sql = "select * from book where id = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, bookID);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                book = new Book();
+                book.setId(rs.getInt("id"));
+                book.setName(rs.getString("name"));
+                book.setAuthor(rs.getString("author"));
+                book.setPrice(Double.parseDouble(rs.getString("price")));
+                book.setCategory(rs.getString("category"));
+                book.setPage(Integer.parseInt(rs.getString("page")));
+                book.setDeepth(Double.parseDouble(rs.getString("deepth")));
+                book.setHeight(Double.parseDouble(rs.getString("height")));
+                book.setWidth(Double.parseDouble(rs.getString("width")));
+                book.setFileName(rs.getString("file_name"));
+                book.setSold(rs.getInt("sold"));
+
+                allBooks.add(book);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return allBooks.get(0);
     }
 }

@@ -1,3 +1,21 @@
+<%@ page import="bookstore.entity.User" %>
+<%@ page import="bookstore.DB.DBConnect" %>
+<%@ page import="bookstore.DAO.WishlistDAOIplm" %>
+<%@ page import="bookstore.DAO.CartDAOIplm" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page isELIgnored="false" %>
+
+<%
+    User user = (User)session.getAttribute("userObj");
+    WishlistDAOIplm wishlistDAO = new WishlistDAOIplm(DBConnect.getConnection());
+    CartDAOIplm cartDAO = new CartDAOIplm(DBConnect.getConnection());
+    int wishlistQty = 0, cartQty = 0;
+    if(user != null) {
+        wishlistQty = wishlistDAO.getBookIDs(user.getId()).size();
+        cartQty = cartDAO.getSumQuantity(user.getId());
+    }
+%>
+
 <div class="container">
     <div class="row">
         <!-- Left element -->
@@ -7,20 +25,18 @@
             </a>
             <span class="small" style="font-family: 'Fira Code', monospace;">Contact with Quyet on</span>
 
-            <!-- Facebook -->
-            <a data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm ml-2" style="background-color: #3b5998;" href="https://www.facebook.com/nvq29Apr/" role="button"
-            ><i class="fab fa-facebook-f fa-fw"></i
-            ></a>
+            <a data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm ml-2" style="background-color: #3b5998;" href="https://www.facebook.com/nvq29Apr/" role="button" target="_blank">
+                <i class="fab fa-facebook-f fa-fw"></i>
+            </a>
 
-            <!-- Github -->
-            <a data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm" style="background-color: #333333;" href="https://github.com/nvq29Apr" role="button"
-            ><i class="fab fa-github fa-fw"></i
-            ></a>
+            <a data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm" style="background-color: #333333;" href="https://github.com/nvq29Apr" role="button" target="_blame">
+                <i class="fab fa-github fa-fw"></i>
+            </a>
 
-            <!-- Slack -->
-            <a data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm" style="background-color: #481449;" href="https://app.slack.com/client/T02QFU9TCTD/D05JL21JNT0" role="button"
-            ><i class="fab fa-slack-hash fa-fw"></i
-            ></a>
+            <a data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm" style="background-color: #481449;" href="https://app.slack.com/client/T02QFU9TCTD/D05JL21JNT0" role="button" target="_blank">
+                <i class="fab fa-slack-hash fa-fw"></i>
+            </a>
+
         </div>
 
         <!-- Left element -->
@@ -28,15 +44,27 @@
         <!-- Right element -->
         <div class="col-6">
             <div class="container align-items-center flex-column">
+                <%if(user != null){%>
+                <!-- User & Log out -->
+                    <div class="row d-flex justify-content-center m-2">
+                        <span class="text-center">
+                            <i class="fa-regular fa-user fs-6"></i>
+                            <span class="fw-bold fs-6"><%=user.getEmail()%></span>
+                            <span class="mx-2"><a href="logout" class="text-custom fs-6">Sign out</a></span>
+                        </span>
+                    </div>
+                <!-- User & Log out -->
+                <%} else {%>
                 <!-- Sign in & sign up -->
-                <div class="row d-flex justify-content-center m-2">
-                    <span class="text-center">
-                        <a href="login.jsp" class="text-custom fs-6">Sign in</a>
-                        <span>or</span>
-                        <a href="register.jsp" class="text-custom fs-6">Create an Account</a>
-                    </span>
-                </div>
-                <!-- Sign in & sign up -->
+                    <div class="row d-flex justify-content-center m-2">
+                        <span class="text-center">
+                            <a href="login.jsp" class="text-custom fs-6">Sign in</a>
+                            <span>or</span>
+                            <a href="register.jsp" class="text-custom fs-6">Create an Account</a>
+                        </span>
+                    </div>
+                    <!-- Sign in & sign up -->
+                <%}%>
 
                 <!-- Search, wishlist, cart -->
                 <div class="row text-center">
@@ -47,15 +75,16 @@
                             <button type="submit" class="bg-custom border-0 d-flex justify-content-center align-items-center flex-column"><i class="fa-solid fa-magnifying-glass text-white "></i></button>
                         </form>
                     </div>
-                    <a href="" class="col text-white bg-custom mx-1 d-flex justify-content-center align-items-center flex-column">
-                        <i class="fa-regular fa-heart"></i>
+                    <a href="wishlist.jsp" class="col text-white bg-custom mx-1 d-flex justify-content-center align-items-center flex-column position-relative">
+                        <i class="fa-regular fa-heart fa-xl"></i>
+                        <span id="wishlistQty" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"><%=wishlistQty != 0 ? wishlistQty : ""%></span>
                     </a>
-                    <a href="" class="col text-white bg-custom d-flex justify-content-center align-items-center flex-row">
-                        <i class="fa-solid fa-cart-shopping me-2"></i>
+                    <a href="cart.jsp" class="col text-white bg-custom d-flex justify-content-center align-items-center flex-row position-relative">
+                        <i class="fa-brands fa-opencart mx-2"></i>
                         CART
+                        <span id="cartQty" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"><%=cartQty != 0 ? cartQty : ""%></span>
                     </a>
                 </div>
-
                 <!-- Search, wishlist, cart -->
             </div>
         </div>
