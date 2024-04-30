@@ -9,7 +9,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Book Store</title>
+    <title>Collections</title>
     <link rel="icon" type="image/png" href="all_component/img/logo%20no%20title.png">
 
     <%@include file="all_component/all_css.jsp"%>
