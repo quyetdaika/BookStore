@@ -30,7 +30,7 @@
     <header>
         <!--Main Navigation-->
 
-            <%
+<%
     BookDAOIplm bookDAO = new BookDAOIplm(DBConnect.getConnection());
     List<Book> cartBooks = new ArrayList<>();
     double totalPrice = 0, tax = 0, grandTotal = 0;
