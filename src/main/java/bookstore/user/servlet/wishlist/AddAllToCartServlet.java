@@ -1,4 +1,4 @@
-package bookstore.user.servlet;
+package bookstore.user.servlet.wishlist;
 
 import bookstore.DAO.CartDAOIplm;
 import bookstore.DAO.WishlistDAOIplm;

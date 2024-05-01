@@ -105,7 +105,7 @@
                                         <button class="btn btn-white border border-secondary" type="button" id="decrease-button" data-mdb-ripple-color="dark">
                                             <i class="fas fa-minus"></i>
                                         </button>
-                                        <input type="number" id="quantity-input" class="form-control text-center border border-secondary" value="<%=cartDAO.getBookQtyInCart(user.getId(), book.getId())%>" aria-describedby="button-addon1" />
+                                        <input type="number" id="quantity-input" class="form-control text-center border border-secondary" value="<%=cartDAO.getBookQtyInCart(user.getId(), book.getId())%>"/>
                                         <button class="btn btn-white border border-secondary" type="button" id="increase-button" data-mdb-ripple-color="dark">
                                             <i class="fas fa-plus"></i>
                                         </button>
@@ -174,7 +174,7 @@
                         </div>
 
                         <div class="mt-3">
-                            <a href="checkout.jsp" class="btn btn-success w-100 shadow-0 mb-2"> Make Purchase </a>
+                            <a href="checkout.jsp" id="btn-make-purchase" class="btn btn-success w-100 shadow-0 mb-2"> Make Purchase </a>
                             <a href="index.jsp" class="btn btn-light w-100 border mt-2"> Back to shop </a>
                         </div>
                     </div>
@@ -236,7 +236,64 @@
             removeBookFromCart.call(btn, event);
         });
     });
+</script>
 
+<script>
+    const quantityInputs = document.querySelectorAll('#quantity-input');
+
+    quantityInputs.forEach(input => {
+        input.addEventListener('blur', () => {
+            const value = input.value.trim();
+            const parsedValue = parseInt(value);
+
+            if (value === '') {
+                input.value = '1';
+            } else if (Number.isInteger(parsedValue) && parsedValue > 0) {
+                // If the value is a positive integer, keep it as is
+                input.value = parsedValue.toString();
+            } else {
+                // If the value is not a positive integer, set it to 1
+                input.value = '1';
+            }
+
+            updateBookQtyInCart(input);
+            updateTotals(input);
+        });
+    });
+</script>
+
+//
+<script>
+    function updateBookQtyInCart(quantityInput){
+        console.log("quantity input changed");
+        const bookId = quantityInput.closest('.row').querySelector('a').href.split('bookID=')[1];
+        const quantity = parseInt(quantityInput.value);
+
+        // Send the AJAX request to update the cart
+        fetch('UpdateCartServlet', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: 'bookId=' + encodeURIComponent(bookId) + '&quantity=' + encodeURIComponent(quantity)
+        })
+            .then(response => {
+                if (response.ok) {
+                    // Update the cart quantity
+                    response.text().then(function(data) {
+                        console.log(data)
+                        const cartQty = data ? data : '0';
+
+                        updateCartQty(cartQty);
+                    });
+                } else {
+                    console.error('Failed to update cart');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
 </script>
 
 <script>
@@ -253,6 +310,7 @@
         }
 
         quantityInput.value = currentValue;
+        updateBookQtyInCart(quantityInput)
         updateTotals(quantityInput);
     }
 
@@ -367,6 +425,10 @@
                 mainContent.style.display = 'none'; // Add a null check for mainContent
             }
         }
+    }
+
+    function updateCartItem(){
+
     }
 
 </script>

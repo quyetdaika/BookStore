@@ -165,3 +165,13 @@ a {
     max-height: 500px; /* Đặt chiều cao tối đa cho phần tử chứa sản phẩm */
     overflow-y: auto; /* Hiển thị thanh cuộn dọc khi nội dung vượt quá chiều cao */
 }
+
+#quantity-input::-webkit-outer-spin-button,
+#quantity-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+#quantity-input[type=number] {
+    -moz-appearance: textfield;
+}

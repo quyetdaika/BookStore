@@ -1,6 +1,7 @@
 package bookstore.DAO;
 
 import bookstore.DB.DBConnect;
+import bookstore.entity.CartItem;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -47,6 +48,26 @@ public class CartDAOIplm implements CartDAO{
         }
         if(f) System.out.println("insert to Cart success");
         else System.out.println("insert to Cart failed");
+        return f;
+    }
+
+    @Override
+    public boolean updateBookInCart(int userID, int bookID, int quantity) {
+        boolean f = false;
+        try {
+            String sql = "update cart set quantity = ? where userID = ? and bookID = ?;";
+
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, quantity);
+            ps.setInt(2, userID);
+            ps.setInt(3, bookID);
+
+            f = ps.executeUpdate() == 1;
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        if(f) System.out.println("update book in Cart success");
+        else System.out.println("update book in Cart failed");
         return f;
     }
 
