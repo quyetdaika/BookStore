@@ -1,4 +1,4 @@
-package bookstore.user.servlet;
+package bookstore.user.servlet.wishlist;
 
 import java.io.*;
 
@@ -9,8 +9,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
-@WebServlet("/RemoveFromWishlistServlet")
-public class RemoveFromWishlistServlet extends HttpServlet {
+@WebServlet("/AddToWishlistServlet")
+public class AddToWishlistServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
@@ -28,9 +28,9 @@ public class RemoveFromWishlistServlet extends HttpServlet {
             // Lấy bookId từ yêu cầu
             int bookId = Integer.parseInt(request.getParameter("bookId"));
 
-            // Xóa sản phẩm khỏi Wishlist
+            // Thêm sản phẩm vào Wishlist
             WishlistDAOIplm wishlistDAO = new WishlistDAOIplm(DBConnect.getConnection());
-            wishlistDAO.removeBookFromWishlist(user.getId(), bookId);
+            wishlistDAO.addBookToWishlist(user.getId(), bookId);
 
             // Trả về phản hồi thành công
             int wishlistCount = wishlistDAO.getBookIDs(user.getId()).size();

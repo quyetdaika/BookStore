@@ -1,39 +1,40 @@
-package bookstore.user.servlet;
-
-import java.io.*;
+package bookstore.user.servlet.cart;
 
 import bookstore.DAO.CartDAOIplm;
 import bookstore.DB.DBConnect;
 import bookstore.entity.User;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
-@WebServlet("/AddToCartServlet")
-public class AddToCartServlet extends HttpServlet {
+import java.io.IOException;
+
+@WebServlet("/RemoveFromCartServlet")
+public class RemoveFromCartServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            // Lấy thông tin người dùng từ session
+            // Get the user from the session
             HttpSession session = request.getSession();
             User user = (User) session.getAttribute("userObj");
 
-            // Kiểm tra xem người dùng đã đăng nhập hay chưa
+            // Check if the user is logged in
             if (user == null) {
-                // Trả về mã lỗi nếu người dùng chưa đăng nhập
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
 
-            // Lấy bookId và quantity từ yêu cầu
+            // Get the bookId from the request
             int bookId = Integer.parseInt(request.getParameter("bookId"));
-            int quantity = Integer.parseInt(request.getParameter("quantity"));
 
-            // Thêm sản phẩm vào giỏ hàng
+            // Remove the book from the cart
             CartDAOIplm cartDAO = new CartDAOIplm(DBConnect.getConnection());
-            boolean success = cartDAO.addBookToCart(user.getId(), bookId, quantity);
+            boolean success = cartDAO.removeBookFromCart(user.getId(), bookId);
 
-            // Trả về phản hồi thành công hoặc lỗi
+            // Return the response
             if (success) {
                 int cartQty = cartDAO.getSumQuantity(user.getId());
                 response.getWriter().write(String.valueOf(cartQty));
@@ -44,7 +45,6 @@ public class AddToCartServlet extends HttpServlet {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            // Trả về mã lỗi nếu có lỗi xảy ra
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
