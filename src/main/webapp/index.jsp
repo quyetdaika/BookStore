@@ -1,9 +1,10 @@
 <%@ page import="java.sql.Connection" %>
-<%@ page import="bookstore.DB.DBConnect" %>
-<%@ page import="bookstore.DAO.BookDAOIplm" %>
+<%@ page import="bookstore.subsystem.mysqlsubsystem.MySQLConnector" %>
+<%@ page import="bookstore.subsystem.mysqlsubsystem.MySQLBookDAO" %>
 <%@ page import="java.util.List" %>
-<%@ page import="bookstore.entity.Book" %>
-<%@ page import="bookstore.entity.User" %>
+<%@ page import="bookstore.entities.Book" %>
+<%@ page import="bookstore.entities.User" %>
+<%@ page import="bookstore.subsystem.iface.IBookDAO" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -20,7 +21,7 @@
 <body>
 
 <%
-    BookDAOIplm bookDAO = new BookDAOIplm(DBConnect.getConnection());
+    IBookDAO bookDAO = new MySQLBookDAO(MySQLConnector.getConnection());
     List<Book> newReleaseBooks = bookDAO.getNewReleaseBooks();
     List<Book> saleBooks = bookDAO.getSaleBooks();
 %>
@@ -53,11 +54,11 @@
 <!-- Feature -->
 
 <!-- Blog -->
-<%@include file="all_component/blog.jsp"%>
+<%--<%@include file="all_component/blog.jsp"%>--%>
 <!-- Blog -->
 
 <!-- Jumbotron -->
-<%@include file="all_component/jumbotron.jsp"%>
+<%--<%@include file="all_component/jumbotron.jsp"%>--%>
 <!-- Jumbotron -->
 
 <!-- Footer -->

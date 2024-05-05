@@ -1,5 +1,5 @@
-<%@ page import="java.sql.Connection" %> <%@ page import="bookstore.DB.DBConnect" %> <%@ page import="bookstore.DAO.BookDAOIplm" %> <%@ page import="bookstore.entity.Book" %> <%@ page import="java.net.URLDecoder" %> <%@ page
-        import="bookstore.DAO.BookDAO" %> <%@ page import="java.util.*" %>
+<%@ page import="java.sql.Connection" %> <%@ page import="bookstore.subsystem.mysqlsubsystem.MySQLConnector" %> <%@ page import="bookstore.subsystem.mysqlsubsystem.MySQLBookDAO" %> <%@ page import="bookstore.entities.Book" %> <%@ page import="java.net.URLDecoder" %> <%@ page
+        import="bookstore.subsystem.iface.IBookDAO" %> <%@ page import="java.util.*" %>
 <%@ page import="java.util.stream.Collectors" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
@@ -26,7 +26,7 @@
 <!--Main Navigation-->
 
 <%
-    BookDAOIplm bookDAO = new BookDAOIplm(DBConnect.getConnection());
+    IBookDAO bookDAO = new MySQLBookDAO(MySQLConnector.getConnection());
     List<Book> wishlistBooks = new ArrayList<>();
     if(user != null){
         List<Integer> bookIDs = wishlistDAO.getBookIDs(user.getId());

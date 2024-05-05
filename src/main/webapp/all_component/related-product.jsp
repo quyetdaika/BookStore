@@ -32,7 +32,7 @@
                                     </div>
                                     <div class="d-flex align-items-center mt-auto">
                                         <a href="#" class="btn-add-to-cart-2 flex-grow-1 fw-bold">
-                                            </i>ADD TO CART
+                                            ADD TO CART
                                         </a>
                                     </div>
                                 </div>

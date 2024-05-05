@@ -1,14 +1,16 @@
-<%@ page import="bookstore.entity.User" %>
-<%@ page import="bookstore.DB.DBConnect" %>
-<%@ page import="bookstore.DAO.WishlistDAOIplm" %>
-<%@ page import="bookstore.DAO.CartDAOIplm" %>
+<%@ page import="bookstore.entities.User" %>
+<%@ page import="bookstore.subsystem.mysqlsubsystem.MySQLConnector" %>
+<%@ page import="bookstore.subsystem.mysqlsubsystem.MySQLWishlistDAO" %>
+<%@ page import="bookstore.subsystem.mysqlsubsystem.MySQLCartDAO" %>
+<%@ page import="bookstore.subsystem.iface.IWishlistDAO" %>
+<%@ page import="bookstore.subsystem.iface.ICartDAO" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page isELIgnored="false" %>
 
 <%
     User user = (User)session.getAttribute("userObj");
-    WishlistDAOIplm wishlistDAO = new WishlistDAOIplm(DBConnect.getConnection());
-    CartDAOIplm cartDAO = new CartDAOIplm(DBConnect.getConnection());
+    ICartDAO cartDAO = new MySQLCartDAO(MySQLConnector.getConnection());
+    IWishlistDAO wishlistDAO = new MySQLWishlistDAO(MySQLConnector.getConnection());
     int wishlistQty = 0, cartQty = 0;
     if(user != null) {
         wishlistQty = wishlistDAO.getBookIDs(user.getId()).size();

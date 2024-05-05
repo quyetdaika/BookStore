@@ -41,11 +41,6 @@
                                 <form action="login" method="post">
                                     <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign in</p>
 
-<%--                                    <c:if test="${not empty failedMsg}">--%>
-<%--                                        <p class="text-center text-danger">${failedMsg}</p>--%>
-<%--                                        <c:remove var="failedMsg" scope="session"></c:remove>--%>
-<%--                                    </c:if>--%>
-
                                     <!-- Email input -->
                                     <div class="d-flex flex-row align-items-center mb-4">
                                         <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
