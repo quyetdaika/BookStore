@@ -1,10 +1,10 @@
 <%@ page import="java.sql.Connection" %>
-<%@ page import="bookstore.DB.DBConnect" %>
-<%@ page import="bookstore.DAO.BookDAOIplm" %>
-<%@ page import="bookstore.entity.Book" %>
+<%@ page import="bookstore.subsystem.mysqlsubsystem.MySQLConnector" %>
+<%@ page import="bookstore.subsystem.mysqlsubsystem.MySQLBookDAO" %>
+<%@ page import="bookstore.entities.Book" %>
 <%@ page import="java.net.URLDecoder" %>
-<%@ page import="bookstore.DAO.BookDAO" %>
-<%@ page import="bookstore.DAO.CartDAOIplm" %>
+<%@ page import="bookstore.subsystem.iface.IBookDAO" %>
+<%@ page import="bookstore.subsystem.mysqlsubsystem.MySQLCartDAO" %>
 <%@ page import="java.util.*" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
@@ -31,7 +31,7 @@
 <!--Main Navigation-->
 
 <%
-    BookDAOIplm bookDAO = new BookDAOIplm(DBConnect.getConnection());
+    IBookDAO bookDAO = new MySQLBookDAO(MySQLConnector.getConnection());
     List<Book> cartBooks = new ArrayList<>();
     double totalPrice = 0, tax = 0, shippingCost = 0, grandTotal = 0;
 
@@ -41,9 +41,9 @@
             cartBooks.add(bookDAO.getBookByID(bookID));
             totalPrice += bookDAO.getBookByID(bookID).getPrice() * cartDAO.getBookQtyInCart(user.getId(), bookID);
         }
-        shippingCost = bookIDs.size() * 1.5;
+        shippingCost = cartDAO.getSumQuantity(user.getId()) * 1.5;
         tax = totalPrice * 0.1;
-        grandTotal = totalPrice + shippingCost +tax;
+        grandTotal = totalPrice + shippingCost + tax;
     }
 %>
 

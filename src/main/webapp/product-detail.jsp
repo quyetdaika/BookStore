@@ -1,6 +1,6 @@
-<%@ page import="java.sql.Connection" %> <%@ page import="bookstore.DB.DBConnect" %> <%@ page import="bookstore.DAO.BookDAOIplm" %> <%@ page import="bookstore.entity.Book" %> <%@ page import="java.net.URLDecoder" %> <%@ page
-        import="bookstore.DAO.BookDAO" %> <%@ page import="java.util.*" %>
-<%@ page import="bookstore.DAO.WishlistDAOIplm" %>
+<%@ page import="java.sql.Connection" %> <%@ page import="bookstore.subsystem.mysqlsubsystem.MySQLConnector" %> <%@ page import="bookstore.subsystem.mysqlsubsystem.MySQLBookDAO" %> <%@ page import="bookstore.entities.Book" %> <%@ page import="java.net.URLDecoder" %> <%@ page
+        import="bookstore.subsystem.iface.IBookDAO" %> <%@ page import="java.util.*" %>
+<%@ page import="bookstore.subsystem.mysqlsubsystem.MySQLWishlistDAO" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -25,7 +25,7 @@
 <!--Main Navigation-->
 
 <%
-    BookDAOIplm bookDAO = new BookDAOIplm(DBConnect.getConnection());
+    IBookDAO bookDAO = new MySQLBookDAO(MySQLConnector.getConnection());
     String bookIDParam = request.getParameter("bookID");
     Book currentBook = bookDAO.getBookByID(Integer.parseInt(bookIDParam));
     List<Book> relatedBooks = new ArrayList<>();
